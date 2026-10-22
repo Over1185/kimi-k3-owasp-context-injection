@@ -55,4 +55,15 @@ Código y scripts: MIT (`LICENSE`). Datos, reportes y textos: CC BY 4.0 (<https:
 
 ## Cómo citar
 
-Ver `CITATION.cff` y el DOI de Zenodo: *Aun no publicado*
+Ver `CITATION.cff` y el DOI de Zenodo: *Aun no publicado*.
+
+## Antes de publicar: anonimizar
+
+Los exports del chat y los reportes pueden contener rutas con tu usuario de Windows. `collect_run.py` anonimiza automáticamente los chats al guardarlos y `run_sast.py` usa rutas relativas. Para una revisión final (o para limpiar archivos antiguos):
+
+```bash
+python scripts/anonymize_logs.py            # revisa; termina con código 1 si hay algo que limpiar
+python scripts/anonymize_logs.py --apply    # limpia chat_logs/, data/ y sast_reports/
+```
+
+Crea un archivo `.anonymize_terms.txt` (ya está en `.gitignore`) con un término por línea (tu nombre completo, correo, nombre del equipo...) para que también se reemplacen por `<REDACTED>`.

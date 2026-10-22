@@ -26,6 +26,61 @@ N_ITERATIONS = 5
 FRAGMENT_RE = re.compile(r"^(E\d{2})_(control|experimental)_iter(\d+)$")
 
 
+# ----------------------------------------------------------------------------
+# Anonimización (rutas con nombre de usuario y términos personales)
+# ----------------------------------------------------------------------------
+PLACEHOLDER = "<USER>"
+TERMS_FILE = ROOT / ".anonymize_terms.txt"   # NO se sube a GitHub (ver .gitignore)
+_SEP = r"(?:\\{1,4}|/|%2[Ff]|%5[Cc])+"
+_NAME = r"(?:(?!%2[Ff]|%5[Cc])[^\\/\"'\s<>:*?|,;()\[\]{}])+"
+# C:\Users\NOMBRE, C:\\Users\\NOMBRE (JSON), file:///c%3A/Users/NOMBRE
+_WIN_USER = re.compile(rf"(?P<pre>(?<![A-Za-z])[A-Za-z](?::|%3[Aa]){_SEP}Users{_SEP})(?P<name>{_NAME})", re.I)
+_MAC_USER = re.compile(rf"(?P<pre>(?<![\w.\-])/Users/)(?P<name>{_NAME})")
+_KEEP_NAMES = {"public", "default", "<user>", "all", "shared"}
+
+
+def load_terms() -> list[str]:
+    """Términos personales extra (nombre completo, correo, equipo...) desde .anonymize_terms.txt."""
+    if not TERMS_FILE.is_file():
+        return []
+    out = []
+    for line in TERMS_FILE.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#"):
+            out.append(line)
+    return out
+
+
+def anonymize_text(text: str, extra_terms=()) -> tuple[str, dict]:
+    """Reemplaza el nombre de usuario en rutas de Windows/macOS por <USER> y los
+    términos extra (coincidencia exacta, con límites de palabra) por <REDACTED>.
+
+    Devuelve (texto_nuevo, {término_o_nombre: n_reemplazos}).
+    No toca palabras sueltas del texto: el nombre de usuario solo se reemplaza
+    cuando aparece dentro de una ruta.
+    """
+    counts: dict[str, int] = {}
+
+    def _sub(m):
+        name = m.group("name")
+        if name.lower() in _KEEP_NAMES:
+            return m.group(0)
+        counts[name] = counts.get(name, 0) + 1
+        return m.group("pre") + PLACEHOLDER
+
+    text = _WIN_USER.sub(_sub, text)
+    text = _MAC_USER.sub(_sub, text)
+    for term in extra_terms:
+        if not term:
+            continue
+        pat = re.compile(rf"(?<!\w){re.escape(term)}(?!\w)")
+        n = len(pat.findall(text))
+        if n:
+            counts[term] = counts.get(term, 0) + n
+            text = pat.sub("<REDACTED>", text)
+    return text, counts
+
+
 def load_protocol() -> dict:
     return json.loads((PROTOCOL / "prompts.json").read_text(encoding="utf-8"))
 
@@ -60,6 +115,7 @@ def utc_now() -> str:
 def log_event(fid: str, event: str, detail: str = "") -> None:
     """Agrega una línea a data/run_log.csv (registro automático, no sustituye la bitácora manual)."""
     DATA.mkdir(exist_ok=True)
+    detail = anonymize_text(detail, load_terms())[0]
     path = DATA / "run_log.csv"
     is_new = not path.exists()
     with path.open("a", newline="", encoding="utf-8") as f:

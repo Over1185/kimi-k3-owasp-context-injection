@@ -15,6 +15,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import os
 import shutil
 import subprocess
 import sys
@@ -33,6 +34,21 @@ CONTEXT_MAP = {
 
 def git(ws: Path, *args: str) -> None:
     subprocess.run(["git", *args], cwd=ws, check=True, capture_output=True, text=True)
+
+
+def find_code_cli() -> str | None:
+    """Localiza el ejecutable de VS Code: primero el PATH y luego rutas típicas de Windows."""
+    found = shutil.which("code") or shutil.which("code.cmd")
+    if found:
+        return found
+    candidates = []
+    for env, rel in (("LOCALAPPDATA", r"Programs\Microsoft VS Code\bin\code.cmd"),
+                     ("ProgramFiles", r"Microsoft VS Code\bin\code.cmd"),
+                     ("ProgramFiles(x86)", r"Microsoft VS Code\bin\code.cmd")):
+        base = os.environ.get(env)
+        if base:
+            candidates.append(Path(base) / rel)
+    return next((str(c) for c in candidates if c.is_file()), None)
 
 
 def main() -> int:
@@ -91,7 +107,7 @@ def main() -> int:
     git(ws, "add", "-A")
     git(ws, "commit", "-q", "--allow-empty", "-m", "baseline")
 
-    log_event(fid, "PREPARADO", f"ws={ws}; contexto={';'.join(hashes) or 'ninguno'}")
+    log_event(fid, "PREPARADO", f"contexto={';'.join(hashes) or 'ninguno'}")
 
     proto = load_protocol()
     scope = proto["scope_instruction_E03"] if args.scenario == "E03" else proto["scope_instruction"]
@@ -115,9 +131,9 @@ def main() -> int:
           f"--iter {args.iteration} --chat-json RUTA_DEL_EXPORT.json --verification ok\n")
 
     if args.open:
-        code = shutil.which("code")
+        code = find_code_cli()
         if not code:
-            print("(No encontré el comando 'code' en el PATH; abre la carpeta manualmente.)")
+            print("(No encontré VS Code (comando 'code'); abre la carpeta manualmente con el perfil indicado.)")
         else:
             subprocess.Popen([code, "--profile", args.profile, str(ws)])
     return 0

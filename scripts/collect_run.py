@@ -21,7 +21,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from common import (CHAT_LOGS, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT, fragment_id, log_event,
+from common import (anonymize_text, load_terms, CHAT_LOGS, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT, fragment_id, log_event,
                     rmtree_force, scenarios, sha256)
 
 
@@ -40,7 +40,8 @@ def inspect_chat(path: Path) -> dict:
     data = json.loads(path.read_text(encoding="utf-8"))
     reqs = data.get("requests", [])
     info = {"n_requests": len(reqs), "models": [], "agents": set(), "modes": set(),
-            "tools": [], "credits": None, "texts": [], "prompt_tokens": 0, "completion_tokens": 0}
+            "tools": [], "credits": None, "texts": [], "prompt_tokens": 0, "completion_tokens": 0,
+            "thinking": set()}
     for r in reqs:
         info["models"] += [str(r.get("modelId", ""))]
         info["models"] += [str(m.get("model", "")) for m in (r.get("modelTotals") or [])]
@@ -48,6 +49,7 @@ def inspect_chat(path: Path) -> dict:
         if details:
             info["models"].append(str(details))
         info["agents"].add(str((r.get("agent") or {}).get("id", "")))
+        info["thinking"].add(str((r.get("modelConfiguration") or {}).get("thinkingLevel", "sin_dato")))
         info["modes"].add(str((r.get("modeInfo") or {}).get("kind", "")))
         info["credits"] = r.get("sessionCopilotCredits", info["credits"])
         info["prompt_tokens"] += int(r.get("promptTokens") or 0)
@@ -78,6 +80,7 @@ def main() -> int:
     ap.add_argument("--verification", choices=["ok", "fail"], help="resultado de la verificación de contexto")
     ap.add_argument("--discard", metavar="MOTIVO", help="descarta la corrida: registra el motivo y borra la carpeta")
     ap.add_argument("--model-substring", default="kimi", help="texto que debe aparecer en el modelo del chat (default: kimi)")
+    ap.add_argument("--thinking-level", default="max", help="nivel de razonamiento esperado (default: max)")
     ap.add_argument("--skip-chat-check", action="store_true",
                     help="omite la validación automática del chat (justifícalo en la bitácora)")
     ap.add_argument("--keep", action="store_true", help="no borra la carpeta desechable al terminar")
@@ -135,6 +138,8 @@ def main() -> int:
         if not any(args.model_substring.lower() in m.lower() for m in info["models"]):
             problems.append(f"el modelo del chat no contiene '{args.model_substring}': "
                             f"{sorted(set(m for m in info['models'] if m))}")
+        if info["thinking"] != {args.thinking_level}:
+            problems.append(f"nivel de razonamiento {sorted(info['thinking'])} (se esperaba {args.thinking_level})")
         if info["n_requests"] != 2:
             problems.append(f"se esperaban 2 turnos (verificación + prompt) y hay {info['n_requests']}")
         if info["modes"] - {"agent"}:
@@ -147,7 +152,7 @@ def main() -> int:
                                 f"{'NO menciona' if expected else 'menciona'} la skill 'owasp-mitigacion' "
                                 f"(en el grupo {args.group} se esperaba lo contrario)")
         chat_summary = (f"modelo={sorted(set(m for m in info['models'] if m))}; agente={sorted(info['agents'])}; "
-                        f"turnos={info['n_requests']}; herramientas={sorted(set(info['tools']))}; "
+                        f"razonamiento={sorted(info['thinking'])}; turnos={info['n_requests']}; herramientas={sorted(set(info['tools']))}; "
                         f"tokens_in={info['prompt_tokens']}; tokens_out={info['completion_tokens']}; "
                         f"creditos_sesion={info['credits']}")
         print("Chat:", chat_summary)
@@ -183,8 +188,17 @@ def main() -> int:
             src = Path(opt).expanduser()
             if not src.is_file():
                 sys.exit(f"No existe el archivo de chat: {src}")
-            shutil.copy2(src, chat_dir / f"{fid}{suffix}")
-            hashes.append(f"{fid}{suffix}={sha256(chat_dir / (fid + suffix))[:16]}")
+            raw_text = src.read_bytes().decode("utf-8")
+            clean, counts = anonymize_text(raw_text, load_terms())
+            if suffix.endswith(".json"):
+                try:
+                    json.loads(clean)
+                except ValueError:
+                    sys.exit("La anonimización dejó el JSON inválido; no se guardó el chat.")
+            dst_chat = chat_dir / f"{fid}{suffix}"
+            dst_chat.write_bytes(clean.encode("utf-8"))
+            hashes.append(f"{dst_chat.name}={sha256(dst_chat)[:16]}"
+                          f"(anonimizados={sum(counts.values())})")
     if not (args.chat_json or args.chat_md):
         print("AVISO: no indicaste export del chat (--chat-json / --chat-md). Se recomienda guardarlo siempre.")
 

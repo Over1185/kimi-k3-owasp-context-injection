@@ -25,7 +25,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from common import FRAGMENT_RE, FRAGMENTS, GROUPS, PROTOCOL, ROOT, SAST_REPORTS, log_event, utc_now
+from common import anonymize_text, load_terms, FRAGMENT_RE, FRAGMENTS, GROUPS, PROTOCOL, ROOT, SAST_REPORTS, log_event, utc_now
 
 PIN_RE = re.compile(r"^[A-Za-z0-9_.\-]+(\[[A-Za-z0-9_,\-]+\])?==[^\s;,]+")
 
@@ -38,9 +38,14 @@ def tool_version(cmd: list[str]) -> str:
         return f"no disponible ({e})"
 
 
+def rel(p: Path) -> str:
+    """Ruta relativa a la raíz del repo (los reportes no deben contener rutas con el usuario)."""
+    return str(p.relative_to(ROOT)) if ROOT in p.parents else str(p)
+
+
 def run_bandit(frag: Path, out: Path) -> str | None:
-    r = subprocess.run([sys.executable, "-m", "bandit", "-f", "json", "-o", str(out), str(frag)],
-                       capture_output=True, text=True)
+    r = subprocess.run([sys.executable, "-m", "bandit", "-f", "json", "-o", rel(out), rel(frag)],
+                       capture_output=True, text=True, cwd=ROOT)
     # Bandit devuelve 1 cuando encuentra hallazgos: no es un error.
     if r.returncode not in (0, 1) or not out.exists():
         return f"bandit falló (código {r.returncode}): {r.stderr.strip()[:500]}"
@@ -51,9 +56,9 @@ def run_semgrep(frag: Path, out: Path, config: str) -> str | None:
     exe = shutil.which("semgrep")
     if not exe:
         return "semgrep no está instalado o no está en el PATH"
-    r = subprocess.run([exe, "scan", "--config", config, "--json", "--output", str(out),
+    r = subprocess.run([exe, "scan", "--config", config, "--json", "--output", rel(out),
                         "--metrics=off", "--disable-version-check", "--no-git-ignore", "--quiet",
-                        str(frag)], capture_output=True, text=True)
+                        rel(frag)], capture_output=True, text=True, cwd=ROOT)
     if r.returncode not in (0, 1) or not out.exists():
         return f"semgrep falló (código {r.returncode}): {r.stderr.strip()[:500]}"
     return None
@@ -63,8 +68,8 @@ def run_pip_audit(req: Path, out: Path) -> str | None:
     exe = shutil.which("pip-audit")
     if not exe:
         return "pip-audit no está instalado o no está en el PATH"
-    r = subprocess.run([exe, "-r", str(req), "-f", "json", "-o", str(out), "--progress-spinner", "off"],
-                       capture_output=True, text=True)
+    r = subprocess.run([exe, "-r", rel(req), "-f", "json", "-o", rel(out), "--progress-spinner", "off"],
+                       capture_output=True, text=True, cwd=ROOT)
     if not out.exists() or out.stat().st_size == 0:
         return f"pip-audit no produjo reporte (código {r.returncode}): {r.stderr.strip()[:800]}"
     return None
@@ -94,7 +99,7 @@ def main() -> int:
 
     local_rules = PROTOCOL / "semgrep_rules" / "owasp-top-ten.yml"
     if local_rules.is_file():
-        semgrep_cfg = str(local_rules)
+        semgrep_cfg = rel(local_rules)
     else:
         semgrep_cfg = "p/owasp-top-ten"
         print("AVISO: no hay ruleset local congelado; uso 'p/owasp-top-ten' del registro "
@@ -143,7 +148,7 @@ def main() -> int:
             if err:
                 errors += 1
                 err_path = SAST_REPORTS / ("pip_audit" if name == "pip-audit" else name) / f"{fid}.error.txt"
-                err_path.write_text(err, encoding="utf-8")
+                err_path.write_text(anonymize_text(err, load_terms())[0], encoding="utf-8")
                 log_event(fid, "SAST_ERROR", f"{name}: {err[:200]}")
                 print(f"[{fid}] {name}: ERROR -> {err_path.relative_to(ROOT)}")
             else:
