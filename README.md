@@ -17,7 +17,7 @@ Medición: Bandit, Semgrep (`p/owasp-top-ten`) y pip-audit (solo E03). Versiones
 |---|---|
 | `protocol/` | Prompts (`prompts.json`), entorno esperado (`expected_environment.json`), ajustes del perfil de VS Code (`profile_settings.json`), mapeo de reglas SAST, configuración SAST |
 | `context_files/` | Copia de referencia de los archivos de contexto del grupo experimental (**no se editan tras congelar el protocolo**) |
-| `scripts/` | `prepare_workspace.py`, `collect_run.py`, `run_sast.py`, `consolidate.py` |
+| `scripts/` | `prepare_workspace.py`, `collect_run.py`, `run_sast.py`, `consolidate.py`, `record_environment.py`, `anonymize_logs.py` |
 | `fragments/` | Código generado: `<escenario>_<grupo>_iter<n>.py` |
 | `chat_logs/` | Conversaciones exportadas de cada corrida |
 | `sast_reports/` | JSON crudos de las herramientas (sin editar) |
@@ -38,8 +38,10 @@ python analysis/run_all.py                             # tablas y figuras en res
 
 ## Reglas de aislamiento de cada corrida
 
-- La carpeta de trabajo que ve el modelo es siempre `~/trabajo/app` (nombre neutro): su ruta no contiene "owasp", "control", "experimental" ni el código del escenario, porque el modelo lee la ruta.
-- Los ajustes de `protocol/profile_settings.json` se configuran UNA vez en el perfil de VS Code `Experimento` (no dentro de la carpeta de trabajo, para que el modelo no los vea).
+- **Una carpeta desechable por corrida, fuera del repositorio.** Por defecto se crea en `~/owasp_runs/<grupo>/<escenario>/iter<N>` (p. ej. `C:\Users\Over\owasp_runs\experimental\E05\iter2`), con git inicializado y un commit base.
+- **Ruta neutra (opcional, recomendada para el grupo control).** El modelo lee la ruta del workspace. La ruta organizada contiene `owasp_runs`, el grupo y el código del escenario, lo que puede sugerirle OWASP al modelo. Con `--neutral` la carpeta es `~/trabajo/app`, sin ninguna pista. Si usas `--neutral` al preparar, úsalo también en `collect_run.py`.
+- Los ajustes de `protocol/profile_settings.json` se configuran UNA vez en el perfil de VS Code `Experimento` (no dentro de la carpeta de trabajo). **Mantén `chat.tools.global.autoApprove` en `false`**: no actives el modo de aprobación automática.
+- **El agente solo puede crear `scenario.py`** (y `requirements.txt` en E03). No debe ejecutar código ni usar el terminal, la web o servidores MCP. Si el agente pide permiso para una herramienta fuera de alcance, pulsa **Denegar/Omitir**. Una herramienta denegada solo genera un aviso; una herramienta aprobada y ejecutada invalida la corrida (hay que descartarla y repetirla).
 - `collect_run.py` compara cada export contra `protocol/expected_environment.json` (modelo, razonamiento, tipo de agente, turnos, herramientas permitidas) y marca como inválida la corrida que no cumpla.
 
 ## Registro automático del entorno
@@ -48,12 +50,59 @@ python analysis/run_all.py                             # tablas y figuras en res
 
 ## Reproducir la generación (una corrida)
 
+Flujo completo, de principio a fin:
+
+**1. Preparar la carpeta** (crea el workspace, registra el entorno y, con `--open`, abre VS Code con el perfil `Experimento`):
+
 ```bash
 python scripts/prepare_workspace.py --scenario E05 --group experimental --iter 2 --open
-# ... ejecutar la corrida en VS Code (instrucciones impresas por el script) ...
-python scripts/collect_run.py --scenario E05 --group experimental --iter 2 \
-       --chat-json RUTA_DEL_EXPORT.json --verification ok
+# Crea: ~/owasp_runs/experimental/E05/iter2
+# Ruta neutra: añade --neutral  (crea ~/trabajo/app)
 ```
+
+**2. Ejecutar la corrida en VS Code** (modo Agent, Kimi K3, razonamiento máximo, chat NUEVO). El script imprime los prompts exactos:
+
+1. Envía el prompt de **verificación**. El grupo experimental debe listar las directrices y la skill `owasp-mitigacion`; el control debe indicar que no hay convenciones ni skills. Si no se cumple, descarta la corrida (paso 5).
+2. En el MISMO chat, envía el prompt del escenario.
+3. **Rechaza (Denegar/Omitir) cualquier acción fuera de `scenario.py`**, sobre todo `run_in_terminal`. No ejecutes ni pruebes el código generado.
+
+**3. Exportar el chat** con el comando de VS Code `Chat: Export Chat...` y guárdalo como JSON en:
+
+```
+C:\Users\Over\owasp_runs\_export\chat.json
+```
+
+**4. Recoger la corrida** (valida el alcance con git, valida el chat, copia el fragmento y el chat anonimizado, registra en `data/run_log.csv` y borra la carpeta):
+
+```bash
+python scripts/collect_run.py --scenario E05 --group experimental --iter 2 --verification ok
+```
+
+- Por defecto lee el chat de `~/owasp_runs/_export/chat.json`. Para usar otro archivo: `--chat-json RUTA`.
+- Si el export es **anterior** a la preparación de la corrida, el script se detiene (probablemente es el chat de otra corrida). Vuelve a exportar, o usa `--allow-stale-chat` si estás seguro.
+- Si preparaste con `--neutral`, añade `--neutral` aquí también.
+
+**5. Descartar una corrida inválida** (verificación fallida, herramienta ejecutada, archivos extra...):
+
+```bash
+python scripts/collect_run.py --scenario E05 --group experimental --iter 2 --discard "motivo"
+```
+
+Después anota el caso en `data/bitacora.csv` y repite la corrida.
+
+### Opciones útiles de `collect_run.py`
+
+| Opción | Efecto |
+|---|---|
+| `--chat-json RUTA` | Usa otro export de chat (por defecto `~/owasp_runs/_export/chat.json`) |
+| `--chat-md RUTA` | Guarda además el export en Markdown |
+| `--verification ok\|fail` | Resultado de la verificación de contexto |
+| `--discard MOTIVO` | Descarta la corrida y borra la carpeta |
+| `--skip-chat-check` | Omite la validación automática del chat (justifícalo en la bitácora) |
+| `--allow-stale-chat` | Permite un export más antiguo que la preparación de la corrida |
+| `--overwrite` | Sobrescribe un fragmento ya guardado (solo al repetir una corrida a propósito) |
+| `--keep` | No borra la carpeta desechable |
+| `--neutral` / `--base RUTA` | Layout neutro `~/trabajo/app` / otra carpeta base |
 
 ## Limitaciones conocidas
 
