@@ -170,26 +170,19 @@ def main() -> int:
     full_prompt = f"{scn[args.scenario]['prompt']} {scope}"
 
     print(f"\nCarpeta lista: {ws}   (corrida {fid})\n")
-    print("PASOS (modo Agent, Kimi K3, nivel de razonamiento máximo, chat NUEVO):")
-    print("  0. Registra en la bitácora/environment_versions.csv las versiones (si es inicio de bloque).")
-    print("  1. Abre SOLO esta carpeta en VS Code (perfil limpio, con los ajustes de protocol/profile_settings.json).")
-    print("  2. Envía el prompt de VERIFICACIÓN y anota el resultado en la bitácora:")
-    print(f"\n     {proto['verification_prompt']}\n")
-    print("     Experimental: debe listar las directrices Y la skill 'owasp-mitigacion'.")
-    print("     Control: debe indicar que NO hay convenciones ni skills. Si no se cumple -> descarta:")
-    if args.menu:
-        print("        (vuelve al menú y pulsa D)")
-    else:
+    if not args.menu:   # el menú (scripts/menu.py) muestra los pasos uno a uno
+        print("PASOS (modo Agent, Kimi K3, nivel de razonamiento máximo, chat NUEVO):")
+        print("  0. Registra en la bitácora/environment_versions.csv las versiones (si es inicio de bloque).")
+        print("  1. Abre SOLO esta carpeta en VS Code (perfil limpio, con los ajustes de protocol/profile_settings.json).")
+        print("  2. Envía el prompt de VERIFICACIÓN y anota el resultado en la bitácora:")
+        print(f"\n     {proto['verification_prompt']}\n")
+        print("     Experimental: debe listar las directrices Y la skill 'owasp-mitigacion'.")
+        print("     Control: debe indicar que NO hay convenciones ni skills. Si no se cumple -> descarta:")
         print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
               f"--iter {args.iteration} --discard \"verificacion fallida\"")
-    print("  3. En el MISMO chat, envía el prompt del escenario:\n")
-    print(f"     {full_prompt}\n")
-    print("  4. Rechaza cualquier acción fuera de scenario.py (y requirements.txt en E03).")
-    if args.menu:
-        print("  5. Exporta el chat (comando 'Chat: Export Chat...') y guárdalo como")
-        print(f"        {DEFAULT_EXPORT_DIR / 'chat.json'}")
-        print("     Después vuelve a este menú y pulsa Y para recoger los datos.\n")
-    else:
+        print("  3. En el MISMO chat, envía el prompt del escenario:\n")
+        print(f"     {full_prompt}\n")
+        print("  4. Rechaza cualquier acción fuera de scenario.py (y requirements.txt en E03).")
         print("  5. Exporta el chat (comando 'Chat: Export Chat...') y luego ejecuta:")
         print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
               f"--iter {args.iteration} --verification ok\n")

@@ -7,9 +7,11 @@ Flujo:
   1. Muestra el progreso global y te deja elegir el ESCENARIO.
   2. Muestra qué corridas ya están hechas de ese escenario (por grupo e iteración).
   3. Eliges GRUPO e ITERACIÓN (te sugiere la primera pendiente).
-  4. Prepara la carpeta (prepare_workspace.py) y te muestra el paso a paso.
-  5. Cuando termines los pasos pulsas Y y recoge los datos (collect_run.py).
-     Si la corrida resulta inválida te ofrece descartar, reintentar o aceptarla con justificación.
+  4. Prepara la carpeta y te guía en 5 PASOS SECUENCIALES: muestra un paso, te pregunta si salió
+     bien y solo entonces pasa al siguiente (si la verificación falla, ofrece descartar).
+  5. Tras el último paso recoge los datos (collect_run.py). Si la corrida resulta inválida te
+     ofrece descartar, reintentar o aceptarla con justificación.
+  Si pausas (M), al volver a elegir la corrida se retoma en el paso donde la dejaste.
 
 El menú solo orquesta los scripts existentes: todo lo que hacen (validaciones, bitácora
 automática, limpieza) sigue igual.
@@ -23,7 +25,7 @@ import sys
 from pathlib import Path
 
 from common import (DATA, DEFAULT_CHAT_JSON, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT, fragment_id,
-                    log_incident, resolve_workspace, run_status, scenarios)
+                    load_protocol, log_incident, resolve_workspace, run_status, scenarios)
 
 SCRIPTS = Path(__file__).resolve().parent
 PY = sys.executable
@@ -164,6 +166,25 @@ def pick_run(scn: dict, sid: str) -> tuple[str, int] | None:
     return group, it
 
 
+# ----------------------------------------------------------------------------- progreso de la corrida
+TOTAL_STEPS = 5
+
+
+def read_meta() -> dict:
+    marker = resolve_workspace()[2]
+    try:
+        return json.loads(marker.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def update_meta(**kw) -> None:
+    marker = resolve_workspace()[2]
+    meta = read_meta()
+    meta.update(kw)
+    marker.write_text(json.dumps(meta), encoding="utf-8")
+
+
 # ----------------------------------------------------------------------------- recogida
 def wait_for_chat() -> bool:
     while not DEFAULT_CHAT_JSON.is_file():
@@ -174,16 +195,10 @@ def wait_for_chat() -> bool:
     return True
 
 
-def collect_flow(sid: str, group: str, it: int) -> bool:
+def collect_flow(sid: str, group: str, it: int, ver: str) -> bool:
     """Devuelve True si la corrida quedó cerrada (recogida o descartada)."""
     fid = fragment_id(sid, group, it)
     base = ["--scenario", sid, "--group", group, "--iter", str(it)]
-    out("\n¿Resultado de la verificación de contexto (turno 1)?")
-    out("  ok   = el experimental listó directrices y skill / el control indicó que no hay nada")
-    out("  fail = no se cumplió (la corrida debería descartarse)")
-    ver = choose("Verificación", ["ok", "fail"], "ok")
-    if ver == "fail" and yes("La verificación falló: ¿descartar la corrida ahora?", True):
-        return discard_flow(base, fid, "verificacion fallida")
     if not wait_for_chat():
         return False
     extra: list[str] = []
@@ -219,6 +234,116 @@ def discard_flow(base: list[str], fid: str, motivo: str) -> bool:
     return code == 0
 
 
+# ----------------------------------------------------------------------------- pasos secuenciales
+def step_header(k: int, title: str, fid: str) -> None:
+    out("\n" + "=" * 70)
+    out(f"  {fid}  |  PASO {k} de {TOTAL_STEPS}: {title}")
+    out("=" * 70)
+
+
+def next_or_pause(prompt: str = "Pulsa Enter para continuar al siguiente paso (M = pausar y volver al menú)") -> bool:
+    """True = continuar; False = pausar."""
+    ans = ask(prompt).lower()
+    return ans != "m"
+
+
+def yes_no_pause(prompt: str) -> str:
+    """Devuelve 'y', 'n' o 'm' (pausar)."""
+    return choose(f"{prompt} [y = sí, n = no, m = pausar]", ["y", "n", "m"])
+
+
+def guided_steps(sid: str, group: str, it: int, opened: bool, start: int = 1) -> bool:
+    """Guía la corrida paso a paso. Devuelve True si la corrida quedó cerrada (recogida/descartada)."""
+    scn = scenarios()
+    proto = load_protocol()
+    fid = fragment_id(sid, group, it)
+    base = ["--scenario", sid, "--group", group, "--iter", str(it)]
+    ws = resolve_workspace()[1]
+    scope = proto["scope_instruction_E03"] if sid == "E03" else proto["scope_instruction"]
+    full_prompt = f"{scn[sid]['prompt']} {scope}"
+    ver = read_meta().get("verification", "ok")
+    step = start
+    if start > 1:
+        out(f"\nRetomando la corrida {fid} en el paso {start}.")
+
+    while step <= TOTAL_STEPS:
+        update_meta(menu_step=step)
+
+        if step == 1:
+            step_header(1, "Abrir la carpeta y preparar el chat", fid)
+            if opened:
+                out("  La carpeta ya se abrió en VS Code con el perfil 'Experimento'.")
+            else:
+                out(f"  Abre SOLO esta carpeta en VS Code (perfil 'Experimento'):\n     {ws}")
+            out("  En el panel de chat comprueba:")
+            out("    - Sesión LOCAL (no Copilot CLI), modo Agent")
+            out("    - Modelo Kimi K3, nivel de razonamiento máximo")
+            out("    - Chat NUEVO (sin mensajes previos)")
+            out("    - Aprobación automática desactivada (tú apruebas cada acción)")
+            if not next_or_pause():
+                return False
+
+        elif step == 2:
+            step_header(2, "Prompt de VERIFICACIÓN", fid)
+            out("  Envía este prompt en el chat nuevo:\n")
+            out(f"     {proto['verification_prompt']}\n")
+            if group == "experimental":
+                out("  Resultado esperado (EXPERIMENTAL): debe listar las directrices Y la skill 'owasp-mitigacion'.")
+            else:
+                out("  Resultado esperado (CONTROL): debe indicar que NO hay convenciones ni skills.")
+            ans = yes_no_pause("\n¿Salió bien la verificación?")
+            if ans == "m":
+                return False
+            if ans == "n":
+                if yes("La verificación falló: la corrida debe descartarse. ¿Descartarla ahora?", True):
+                    return discard_flow(base, fid, "verificacion fallida")
+                ver = "fail"
+                out("  Se continuará registrando la verificación como FALLIDA (quedará anotado en la bitácora).")
+            else:
+                ver = "ok"
+            update_meta(verification=ver)
+
+        elif step == 3:
+            step_header(3, "Prompt del ESCENARIO (en el MISMO chat)", fid)
+            out("  Envía este prompt en el mismo chat de la verificación:\n")
+            out(f"     {full_prompt}\n")
+            ans = yes_no_pause("¿Ya lo enviaste y el agente terminó de responder?")
+            if ans == "m":
+                return False
+            if ans == "n":
+                out("  Espera a que el agente termine y vuelve a responder.")
+                continue
+
+        elif step == 4:
+            step_header(4, "Control de alcance", fid)
+            allowed = "scenario.py" + (" y requirements.txt" if sid == "E03" else "")
+            out(f"  El agente solo puede crear {allowed}.")
+            out("  Debes haber DENEGADO/OMITIDO cualquier otra acción (sobre todo el terminal) y NO haber")
+            out("  ejecutado ni probado el código generado.")
+            ans = yes_no_pause("\n¿Cumpliste esto (denegaste todo lo que estaba fuera de alcance)?")
+            if ans == "m":
+                return False
+            if ans == "n":
+                out("  Si aprobaste un comando o se ejecutó código, la corrida es inválida.")
+                if yes("¿Descartarla ahora?", True):
+                    return discard_flow(base, fid, "se aprobo o ejecuto una accion fuera de alcance")
+                out("  Se continúa: la validación automática del chat revisará lo ocurrido.")
+
+        elif step == 5:
+            step_header(5, "Exportar el chat y recoger los datos", fid)
+            out("  Exporta el chat con el comando de VS Code 'Chat: Export Chat...' (formato JSON)")
+            out(f"  y guárdalo como:\n     {DEFAULT_CHAT_JSON}")
+            ans = yes_no_pause("\n¿Ya lo exportaste? (y = recoger los datos ahora)")
+            if ans == "m":
+                return False
+            if ans == "n":
+                continue
+            return collect_flow(sid, group, it, ver)
+
+        step += 1
+    return False
+
+
 # ----------------------------------------------------------------------------- flujo principal
 def run_one(scn: dict, sid: str, group: str, it: int) -> None:
     fid = fragment_id(sid, group, it)
@@ -231,9 +356,10 @@ def run_one(scn: dict, sid: str, group: str, it: int) -> None:
             return
         prep.append("--redo")
     elif state == "en curso":
-        out(f"\n{fid} ya está preparada y sin recoger.")
-        if yes("¿Continuar con esa carpeta (ir directo a recoger los datos)?", True):
-            if collect_flow(sid, group, it):
+        step = int(read_meta().get("menu_step", 1))
+        out(f"\n{fid} ya está preparada y sin recoger (iba en el paso {step} de {TOTAL_STEPS}).")
+        if yes("¿Retomarla donde la dejaste?", True):
+            if guided_steps(sid, group, it, opened=True, start=step):
                 out("\nCorrida cerrada.")
             return
     else:
@@ -243,30 +369,18 @@ def run_one(scn: dict, sid: str, group: str, it: int) -> None:
             if not yes("¿Continuar?", False):
                 return
 
-    if yes("¿Abrir la carpeta en VS Code con el perfil 'Experimento'?", True):
+    opened = yes("¿Abrir la carpeta en VS Code con el perfil 'Experimento'?", True)
+    if opened:
         prep.append("--open")
     out("\n>>> Preparando la carpeta...\n")
     if run_script("prepare_workspace.py", *prep) != 0:
         out("\nNo se pudo preparar la corrida (revisa el mensaje de arriba).")
         return
 
-    while True:
-        out("-" * 70)
-        out(f"Corrida en curso: {fid}")
-        out("  Y = ya hice el paso a paso -> recoger los datos")
-        out("  D = descartar esta corrida (p. ej. falló la verificación)")
-        out("  M = volver al menú dejando la carpeta preparada")
-        opt = choose("¿Hecho?", ["y", "d", "m"])
-        if opt == "m":
-            return
-        if opt == "d":
-            motivo = ask("Motivo del descarte", "verificacion fallida")
-            discard_flow(["--scenario", sid, "--group", group, "--iter", str(it)], fid, motivo)
-            return
-        if collect_flow(sid, group, it):
-            out("\nCorrida cerrada.")
-            return
-        out("\nLa corrida sigue abierta.")
+    if guided_steps(sid, group, it, opened):
+        out("\nCorrida cerrada.")
+    else:
+        out("\nLa corrida sigue abierta; vuelve a elegirla en el menú para retomarla.")
 
 
 def main() -> int:
