@@ -1,0 +1,1238 @@
+{
+  "responderUsername": "GitHub Copilot",
+  "initialLocation": "panel",
+  "requests": [
+    {
+      "requestId": "request_c84fa509-86fc-4270-9edf-f245396fa540",
+      "message": {
+        "parts": [
+          {
+            "range": {
+              "start": 0,
+              "endExclusive": 125
+            },
+            "editorRange": {
+              "startLineNumber": 1,
+              "startColumn": 1,
+              "endLineNumber": 1,
+              "endColumn": 126
+            },
+            "text": "¿Cuáles son las principales convenciones y restricciones definidas para este proyecto, y qué Agent Skills tienes disponibles?",
+            "kind": "text"
+          }
+        ],
+        "text": "¿Cuáles son las principales convenciones y restricciones definidas para este proyecto, y qué Agent Skills tienes disponibles?"
+      },
+      "variableData": {
+        "variables": []
+      },
+      "response": [
+        {
+          "kind": "mcpServersStarting",
+          "didStartServerIds": []
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "presentation": "hidden",
+          "invocationMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": []
+          },
+          "toolCallId": "538007ec-938b-4fdc-86b8-3f7f1b130638",
+          "toolId": "manage_todo_list"
+        },
+        {
+          "kind": "thinking",
+          "value": "The user asks: \"What are the main conventions and restrictions defined for this project, and what Agent Skills do you have available?\"\n\nThe workspace is empty (no files shown). Let me check the workspace for any instruction files like copilot-instructions.md, AGENTS.md, .instructions.md, etc. Also check repo memory (empty). Let me list the directory and search for common config files.\n\nLet me check the workspace folder contents.",
+          "id": "1792774342994",
+          "reasoningDurationMs": 2052,
+          "generatedTitle": "Searched for project conventions and available Agent Skills"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "Voy a revisar el workspace en busca de archivos de convenciones o instrucciones del proyecto. ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_a488542efeac45398447647f"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Reading [](file:///c%3A/Users/<USER>/trabajo/app)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Read [](file:///c%3A/Users/<USER>/trabajo/app)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "call_a488542efeac45398447647f",
+          "toolId": "copilot_listDirectory"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Searching for files matching `**/{AGENTS.md,copilot-instructions.md,*.instructions.md,*.agent.md,SKILL.md,.editorconfig,README*}`",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "pastTenseMessage": {
+            "value": "Searched for files matching `**/{AGENTS.md,copilot-instructions.md,*.instructions.md,*.agent.md,SKILL.md,.editorconfig,README*}`, no matches",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "resultDetails": [],
+          "toolCallId": "call_4f3280d5b8cc4f3d8234f3af",
+          "toolId": "copilot_findFiles"
+        },
+        {
+          "kind": "thinking",
+          "value": "The workspace only contains a .git folder — no files at all. No conventions files, no instructions, no README. Repo memory is empty too.\n\nLet me check if there's anything in .git that indicates remotes, but that's probably not needed. Maybe check for global instructions in the user prompts folder? The VSCODE_USER_PROMPTS_FOLDER is at c:\\Users\\<USER>\\AppData\\Roaming\\Code\\User\\prompts. Let me check that quickly for user-level instructions. Also check .github folder? Not present since dir only shows .git.\n\nLet me quickly check the prompts folder for any global customization.",
+          "id": "1792774349256",
+          "reasoningDurationMs": 2527,
+          "generatedTitle": "Checked workspace for global customization and instructions"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_4d2893bbe9c94661898aa3b9"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Searching for files matching `c:\\Users\\<USER>\\AppData\\Roaming\\Code\\User\\prompts\\**`",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "pastTenseMessage": {
+            "value": "Searched for files matching `c:\\Users\\<USER>\\AppData\\Roaming\\Code\\User\\prompts\\**`, no matches",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "resultDetails": [],
+          "toolCallId": "call_4d2893bbe9c94661898aa3b9",
+          "toolId": "copilot_findFiles"
+        },
+        {
+          "kind": "thinking",
+          "value": "No global prompt files either. The workspace is essentially empty (only .git). Repo memory is empty. So there are no project-defined conventions or restrictions beyond my base operating instructions.\n\nNow I answer: \n1. Conventions/restrictions for this project: none defined (empty workspace, only .git; no AGENTS.md, no copilot-instructions.md, no .instructions.md, no editorconfig, empty repo memory). Then briefly mention the general operating rules I follow (from my base instructions): edit tool usage, file linking format, etc. — but the question asks specifically about \"este proyecto\", so the main answer is: none defined yet.\n2. Agent Skills available: list the 4 skills from the instructions:\n   - project-setup-info-local\n   - get-search-view-results\n   - agent-customization\n   - chronicle\n   And the Explore subagent.\n\nKeep it short and impersonal, in Spanish.",
+          "id": "1792774354386",
+          "reasoningDurationMs": 4605,
+          "generatedTitle": "Analizó convenciones y restricciones del proyecto: ninguna definida"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "## Convenciones y restricciones del proyecto\n\nNo hay ninguna definida. El workspace está prácticamente vacío:\n\n- Solo contiene una carpeta ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "inlineReference",
+          "inlineReference": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\.git",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/.git",
+            "path": "/C:/Users/<USER>/trabajo/app/.git",
+            "scheme": "file"
+          }
+        },
+        {
+          "value": " — sin código, sin README, sin archivos de configuración.\n- No existen archivos de personalización: ni AGENTS.md, ni copilot-instructions.md, ni `.instructions.md`/`.agent.md`, ni `.editorconfig`.\n- La memoria de repositorio y de usuario están vacías — no hay notas guardadas de convenciones previas.\n- Tampoco hay prompts globales en tu carpeta de usuario de VS Code.\n\nEn la práctica, esto significa que solo aplican mis reglas operativas base (usar herramientas de edición en lugar de comandos de terminal, formato de enlaces a archivos, etc.). Si quieres, puedo crear un AGENTS.md o un copilot-instructions.md para definir convenciones del proyecto antes de empezar a trabajar.\n\n## Agent Skills disponibles\n\n| Skill | Propósito |\n|---|---|\n| **project-setup-info-local** | Scaffolding de proyectos completos (React, Node, Next.js, extensiones de VS Code, servidores MCP, etc.) |\n| **agent-customization** | Crear/depurar archivos de personalización de agentes (`.instructions.md`, `.prompt.md`, `.agent.md`, SKILL.md, AGENTS.md) |\n| **chronicle** | Analizar el historial de sesiones de Copilot: standups, búsqueda de sesiones pasadas, tips de uso |\n| **get-search-view-results** | Obtener los resultados actuales de la vista de Búsqueda de VS Code |\n\nAdemás del subagente **Explore**, para exploración rápida de código de solo lectura.\n\n¿Quieres que configure la estructura inicial del proyecto o que defina primero las convenciones en un archivo de instrucciones?",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        }
+      ],
+      "agent": {
+        "extensionId": {
+          "value": "GitHub.copilot-chat",
+          "_lower": "github.copilot-chat"
+        },
+        "extensionVersion": "0.71.0",
+        "publisherDisplayName": "GitHub",
+        "extensionPublisherId": "GitHub",
+        "extensionDisplayName": "GitHub Copilot",
+        "id": "github.copilot.editsAgent",
+        "description": "Edit files in your workspace in agent mode",
+        "when": "config.chat.agent.enabled",
+        "metadata": {
+          "themeIcon": {
+            "id": "tools"
+          },
+          "hasFollowups": false,
+          "supportIssueReporting": false
+        },
+        "name": "agent",
+        "fullName": "GitHub Copilot",
+        "isDefault": true,
+        "locations": [
+          "panel"
+        ],
+        "modes": [
+          "agent"
+        ],
+        "slashCommands": [
+          {
+            "name": "compact",
+            "description": "Free up context by compacting the conversation history. Optionally include extra instructions for compaction."
+          },
+          {
+            "name": "explain",
+            "description": "Explain how the code in your active editor works"
+          },
+          {
+            "name": "tests",
+            "description": "Generate unit tests for the selected code",
+            "disambiguation": [
+              {
+                "category": "create_tests",
+                "description": "The user wants to generate unit tests.",
+                "examples": [
+                  "Generate tests for my selection using pytest."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "fix",
+            "description": "Propose a fix for the problems in the selected code",
+            "sampleRequest": "There is a problem in this code. Rewrite the code to show it with the bug fixed."
+          },
+          {
+            "name": "new",
+            "description": "Scaffold code for a new file or project in a workspace",
+            "sampleRequest": "Create a RESTful API server using typescript",
+            "isSticky": true,
+            "disambiguation": [
+              {
+                "category": "create_new_workspace_or_extension",
+                "description": "The user wants to create a complete Visual Studio Code workspace from scratch, such as a new application or a Visual Studio Code extension. Use this category only if the question relates to generating or creating new workspaces in Visual Studio Code. Do not use this category for updating existing code or generating sample code snippets",
+                "examples": [
+                  "Scaffold a Node server.",
+                  "Create a sample project which uses the fileSystemProvider API.",
+                  "react application"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "newNotebook",
+            "description": "Create a new Jupyter Notebook",
+            "sampleRequest": "How do I create a notebook to load data from a csv file?",
+            "disambiguation": [
+              {
+                "category": "create_jupyter_notebook",
+                "description": "The user wants to create a new Jupyter notebook in Visual Studio Code.",
+                "examples": [
+                  "Create a notebook to analyze this CSV file."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "setupTests",
+            "description": "Set up tests in your project (Experimental)",
+            "sampleRequest": "add playwright tests to my project",
+            "when": "config.github.copilot.chat.setupTests.enabled",
+            "disambiguation": [
+              {
+                "category": "set_up_tests",
+                "description": "The user wants to configure project test setup, framework, or test runner. The user does not want to fix their existing tests.",
+                "examples": [
+                  "Set up tests for this project."
+                ]
+              }
+            ]
+          }
+        ],
+        "disambiguation": []
+      },
+      "timestamp": 1792774340243,
+      "modelId": "copilot/kimi-k3",
+      "modelConfiguration": {
+        "reasoningEffort": "max"
+      },
+      "modeInfo": {
+        "kind": "agent",
+        "isBuiltin": true,
+        "telemetryModeId": "agent",
+        "telemetryModeName": "agent",
+        "permissionLevel": "default"
+      },
+      "responseId": "response_663f678c-42f3-4544-a707-80dbbc9c938d",
+      "result": {
+        "timings": {
+          "firstProgress": 4851,
+          "totalElapsed": 29393
+        },
+        "metadata": {
+          "codeBlocks": [],
+          "renderedUserMessage": [
+            {
+              "type": 1,
+              "text": "<context>\nThe current date is 2026-10-23.\n</context>\n<reminderInstructions>\nWhen using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.\nFor maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying \"I'll implement all the changes using multi_replace_string_in_file\").\n\nDon't re-read a file or line range that is still available in your current context — re-reading it only wastes a tool call. Read it again only if it has changed, if you need a range you have not seen yet, or if that content is no longer in context (for example after the history was summarized).\n</reminderInstructions>\n<userRequest>\n¿Cuáles son las principales convenciones y restricciones definidas para este proyecto, y qué Agent Skills tienes disponibles?\n</userRequest>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "renderedGlobalContext": [
+            {
+              "type": 1,
+              "text": "<environment_info>\nThe user's current OS is: Windows\n</environment_info>\n<workspace_info>\nI am working in a workspace with the following folders:\n- c:\\Users\\<USER>\\trabajo\\app \nI am working in a workspace that has the following structure:\n```\n\n```\nThis is the state of the context at this point in the conversation. The view of the workspace structure may be truncated. You can use tools to collect more context if needed.\n</workspace_info>\n<userMemory>\nNo user preferences or notes saved yet. Use the memory tool to store persistent notes under /memories/.\n</userMemory>\n<sessionMemory>\nSession memory (/memories/session/) is empty. No session notes have been created yet.\n</sessionMemory>\n<repoMemory>\nRepository memory (/memories/repo/) is empty. No workspace-scoped notes have been created yet.\n</repoMemory>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "cacheKey": "file:///c%3A/Users/<USER>/trabajo/app",
+          "promptTokens": 18573,
+          "outputTokens": 632,
+          "toolCallRounds": [
+            {
+              "response": "Voy a revisar el workspace en busca de archivos de convenciones o instrucciones del proyecto. ",
+              "toolCalls": [
+                {
+                  "name": "list_dir",
+                  "arguments": "{\"path\": \"c:\\\\Users\\\\<USER>\\\\trabajo\\\\app\"}",
+                  "id": "call_a488542efeac45398447647f__vscode-1792774331170"
+                },
+                {
+                  "name": "file_search",
+                  "arguments": "{\"query\": \"**/{AGENTS.md,copilot-instructions.md,*.instructions.md,*.agent.md,SKILL.md,.editorconfig,README*}\"}",
+                  "id": "call_4f3280d5b8cc4f3d8234f3af__vscode-1792774331171"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "e0a191d9-cc10-4e99-a0a7-a511ca6e3dc1",
+              "thinking": {
+                "id": "bf469281-4e79-4973-9cf6-a5a109826942",
+                "text": "The user asks: \"What are the main conventions and restrictions defined for this project, and what Agent Skills do you have available?\"\n\nThe workspace is empty (no files shown). Let me check the workspace for any instruction files like copilot-instructions.md, AGENTS.md, .instructions.md, etc. Also check repo memory (empty). Let me list the directory and search for common config files.\n\nLet me check the workspace folder contents.",
+                "metadata": {
+                  "toolId": "call_a488542efeac45398447647f"
+                }
+              },
+              "timestamp": 1792774347687,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "",
+              "toolCalls": [
+                {
+                  "name": "file_search",
+                  "arguments": "{\"query\": \"c:\\\\Users\\\\<USER>\\\\AppData\\\\Roaming\\\\Code\\\\User\\\\prompts\\\\**\"}",
+                  "id": "call_4d2893bbe9c94661898aa3b9__vscode-1792774331172"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "f7815df1-65bf-467b-9bf3-4fb202a8f50d",
+              "thinking": {
+                "id": "076b250c-7eff-4598-b090-61c697fc935a",
+                "text": "The workspace only contains a .git folder — no files at all. No conventions files, no instructions, no README. Repo memory is empty too.\n\nLet me check if there's anything in .git that indicates remotes, but that's probably not needed. Maybe check for global instructions in the user prompts folder? The VSCODE_USER_PROMPTS_FOLDER is at c:\\Users\\<USER>\\AppData\\Roaming\\Code\\User\\prompts. Let me check that quickly for user-level instructions. Also check .github folder? Not present since dir only shows .git.\n\nLet me quickly check the prompts folder for any global customization.",
+                "metadata": {
+                  "toolId": "call_4d2893bbe9c94661898aa3b9"
+                }
+              },
+              "timestamp": 1792774352845,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "## Convenciones y restricciones del proyecto\n\nNo hay ninguna definida. El workspace está prácticamente vacío:\n\n- Solo contiene una carpeta `.git` — sin código, sin README, sin archivos de configuración.\n- No existen archivos de personalización: ni AGENTS.md, ni copilot-instructions.md, ni `.instructions.md`/`.agent.md`, ni `.editorconfig`.\n- La memoria de repositorio y de usuario están vacías — no hay notas guardadas de convenciones previas.\n- Tampoco hay prompts globales en tu carpeta de usuario de VS Code.\n\nEn la práctica, esto significa que solo aplican mis reglas operativas base (usar herramientas de edición en lugar de comandos de terminal, formato de enlaces a archivos, etc.). Si quieres, puedo crear un AGENTS.md o un copilot-instructions.md para definir convenciones del proyecto antes de empezar a trabajar.\n\n## Agent Skills disponibles\n\n| Skill | Propósito |\n|---|---|\n| **project-setup-info-local** | Scaffolding de proyectos completos (React, Node, Next.js, extensiones de VS Code, servidores MCP, etc.) |\n| **agent-customization** | Crear/depurar archivos de personalización de agentes (`.instructions.md`, `.prompt.md`, `.agent.md`, SKILL.md, AGENTS.md) |\n| **chronicle** | Analizar el historial de sesiones de Copilot: standups, búsqueda de sesiones pasadas, tips de uso |\n| **get-search-view-results** | Obtener los resultados actuales de la vista de Búsqueda de VS Code |\n\nAdemás del subagente **Explore**, para exploración rápida de código de solo lectura.\n\n¿Quieres que configure la estructura inicial del proyecto o que defina primero las convenciones en un archivo de instrucciones?",
+              "toolCalls": [],
+              "toolInputRetry": 0,
+              "id": "4feed285-0caf-4d31-afe8-a07b5fb2028e",
+              "thinking": {
+                "id": "9489f04c-d891-4e4f-8289-63879cc4041b",
+                "text": "No global prompt files either. The workspace is essentially empty (only .git). Repo memory is empty. So there are no project-defined conventions or restrictions beyond my base operating instructions.\n\nNow I answer: \n1. Conventions/restrictions for this project: none defined (empty workspace, only .git; no AGENTS.md, no copilot-instructions.md, no .instructions.md, no editorconfig, empty repo memory). Then briefly mention the general operating rules I follow (from my base instructions): edit tool usage, file linking format, etc. — but the question asks specifically about \"este proyecto\", so the main answer is: none defined yet.\n2. Agent Skills available: list the 4 skills from the instructions:\n   - project-setup-info-local\n   - get-search-view-results\n   - agent-customization\n   - chronicle\n   And the Explore subagent.\n\nKeep it short and impersonal, in Spanish."
+              },
+              "timestamp": 1792774369372,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            }
+          ],
+          "toolCallResults": {
+            "call_a488542efeac45398447647f__vscode-1792774331170": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "rsn",
+                      "children": [
+                        {
+                          "type": 1,
+                          "ctor": 2,
+                          "ctorName": "K$e",
+                          "children": [
+                            {
+                              "type": 2,
+                              "priority": 9007199254740991,
+                              "text": ".git/",
+                              "references": [],
+                              "lineBreakBefore": true
+                            }
+                          ],
+                          "props": {},
+                          "references": []
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_4f3280d5b8cc4f3d8234f3af__vscode-1792774331171": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "zLe",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "No files found",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_4d2893bbe9c94661898aa3b9__vscode-1792774331172": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "zLe",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "No files found",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "resolvedModel": "kimi-k3",
+          "modelMessageId": "f49936f5-5012-498d-98e0-47d619ca4f19",
+          "responseId": "36fff569-d9f3-4b80-a14e-b4eff3f1eaca",
+          "sessionId": "e69b5c00-7d65-46be-81b2-e5097a618490",
+          "agentId": "github.copilot.editsAgent"
+        },
+        "details": "Kimi K3 • 6.5 credits"
+      },
+      "responseMarkdownInfo": [],
+      "followups": [],
+      "modelState": {
+        "value": 1,
+        "completedAt": 1792774369861
+      },
+      "contentReferences": [],
+      "codeCitations": [],
+      "responseTimestamp": 1792774340243,
+      "timeSpentWaiting": 0,
+      "promptTokens": 18573,
+      "completionTokens": 1052,
+      "outputBuffer": 131072,
+      "promptTokenDetails": [
+        {
+          "category": "System",
+          "label": "System Instructions",
+          "percentageOfPrompt": 23
+        },
+        {
+          "category": "System",
+          "label": "Tool Definitions",
+          "percentageOfPrompt": 73
+        },
+        {
+          "category": "User Context",
+          "label": "Messages",
+          "percentageOfPrompt": 3
+        },
+        {
+          "category": "User Context",
+          "label": "Tool Results",
+          "percentageOfPrompt": 1
+        }
+      ],
+      "copilotCredits": 6.5296199999999995,
+      "elapsedMs": 29618
+    },
+    {
+      "requestId": "request_65d05b5c-96d8-4506-b74b-9210d977cbc2",
+      "message": {
+        "parts": [
+          {
+            "range": {
+              "start": 0,
+              "endExclusive": 206
+            },
+            "editorRange": {
+              "startLineNumber": 1,
+              "startColumn": 1,
+              "endLineNumber": 1,
+              "endColumn": 207
+            },
+            "text": "Diseña el flujo de recuperación de contraseña: el usuario pide un código, lo recibe y cambia su contraseña. Hazlo como un único archivo nuevo llamado scenario.py. No modifiques ni crees ningún otro archivo.",
+            "kind": "text"
+          }
+        ],
+        "text": "Diseña el flujo de recuperación de contraseña: el usuario pide un código, lo recibe y cambia su contraseña. Hazlo como un único archivo nuevo llamado scenario.py. No modifiques ni crees ningún otro archivo."
+      },
+      "variableData": {
+        "variables": []
+      },
+      "response": [
+        {
+          "kind": "mcpServersStarting",
+          "didStartServerIds": []
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "presentation": "hidden",
+          "invocationMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": []
+          },
+          "toolCallId": "b0277aab-a463-491d-bc53-bc6608dc4f7a",
+          "toolId": "manage_todo_list"
+        },
+        {
+          "kind": "thinking",
+          "value": "The user wants me to design a password recovery flow: user requests a code, receives it, and changes their password. As a single new file called scenario.py. No other files should be modified or created.\n\nThe workspace is at c:\\Users\\<USER>\\trabajo\\app (empty except .git). I'll create scenario.py there.\n\n\"Diseña el flujo\" — design the flow. Since it's a \"scenario.py\", it seems like a demonstration/simulation of the flow. I should write a self-contained Python file that models the password recovery flow: request code → send/receive code → verify code → change password. With in-memory storage, secure code generation (secrets), expiration, hashing of passwords, attempt limits, etc.\n\nKeep it as a single file, well-structured, no external dependencies (standard library only). Include a demo main that runs the scenario: user requests code, receives it (simulated), changes password.\n\nLet me design:\n\n- `PasswordRecoveryService` class\n- User store (in-memory dict) with hashed passwords (hashlib pbkdf2 or sha256 with salt)\n- `request_code(email)` → generates 6-digit code with `secrets`, stores with expiry (e.g., 10 min), max attempts; \"sends\" via a sender function (simulated outbox/print).\n- `verify_code(email, code)` → checks existence, expiry, attempts; constant-time compare with hmac.compare_digest.\n- `reset_password(email, code, new_password)` → verifies code, validates password policy, updates hash, invalidates code.\n- One-time use codes; requesting a new code invalidates the previous.\n- Demo in `if __name__ == \"__main__\":` running the three steps.\n\nKeep answers short. Create the file with create_file. The file should be in Spanish comments probably, since user speaks Spanish. I'll write docstrings/comments in Spanish.\n\nLet me write it cleanly.",
+          "id": "1792774373026",
+          "reasoningDurationMs": 9008,
+          "generatedTitle": "Created scenario.py for password recovery flow"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Creating [](file:///c%3A/Users/<USER>/trabajo/app/scenario.py)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/scenario.py": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/scenario.py",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Created [](file:///c%3A/Users/<USER>/trabajo/app/scenario.py)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/scenario.py": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/scenario.py",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "call_c8d12b8ab9db4adc8df8e281",
+          "toolId": "copilot_createFile"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_c8d12b8ab9db4adc8df8e281"
+          }
+        },
+        {
+          "kind": "textEditGroup",
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\scenario.py",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/scenario.py",
+            "path": "/c:/Users/<USER>/trabajo/app/scenario.py",
+            "scheme": "file"
+          },
+          "edits": [
+            [
+              {
+                "text": "\"\"\"Escenario: flujo de recuperación de contraseña.\n\nPasos del flujo:\n    1. El usuario solicita un código de recuperación.\n    2. El sistema genera el código, lo almacena con caducidad y lo \"envía\".\n    3. El usuario introduce el código recibido y establece una nueva contraseña.\n\nDiseño (solo librería estándar, almacenamiento en memoria):\n    - Códigos de 6 dígitos generados con `secrets` (aleatoriedad criptográfica).\n    - Caducidad del código (10 min) y máximo de intentos de verificación (3).\n    - Comparación en tiempo constante con `hmac.compare_digest`.\n    - El código es de un solo uso: pedir uno nuevo o usarlo lo invalida.\n    - Las contraseñas se guardan hasheadas (PBKDF2-HMAC-SHA256 + salt).\n\"\"\"\n\nfrom __future__ import annotations\n\nimport hashlib\nimport hmac\nimport secrets\nimport time\nfrom dataclasses import dataclass, field\n\n\n# ---------------------------------------------------------------------------\n# Excepciones del dominio\n# ---------------------------------------------------------------------------\n\nclass RecoveryError(Exception):\n    \"\"\"Error base del flujo de recuperación.\"\"\"\n\n\nclass UserNotFoundError(RecoveryError):\n    \"\"\"El correo no corresponde a ningún usuario registrado.\"\"\"\n\n\nclass CodeNotRequestedError(RecoveryError):\n    \"\"\"No hay ningún código vigente para ese usuario.\"\"\"\n\n\nclass CodeExpiredError(RecoveryError):\n    \"\"\"El código ha caducado.\"\"\"\n\n\nclass InvalidCodeError(RecoveryError):\n    \"\"\"El código introducido no coincide.\"\"\"\n\n\nclass TooManyAttemptsError(RecoveryError):\n    \"\"\"Se superó el número máximo de intentos; el código queda invalidado.\"\"\"\n\n\nclass WeakPasswordError(RecoveryError):\n    \"\"\"La nueva contraseña no cumple la política mínima.\"\"\"\n\n\n# ---------------------------------------------------------------------------\n# Modelos\n# ---------------------------------------------------------------------------\n\n@dataclass\nclass User:\n    email: str\n    password_hash: str\n\n\n@dataclass\nclass RecoveryCode:\n    code: str\n    expires_at: float\n    attempts_left: int = 3\n    used: bool = False\n\n    def is_expired(self, now: float | None = None) -> bool:\n        return (now or time.time()) >= self.expires_at\n\n\n# ---------------------------------------------------------------------------\n# Servicio de recuperación\n# ---------------------------------------------------------------------------\n\nCODE_TTL_SECONDS = 10 * 60   # 10 minutos\nMAX_ATTEMPTS = 3\nMIN_PASSWORD_LENGTH = 8\n\n\nclass PasswordRecoveryService:\n    \"\"\"Gestiona usuarios y el flujo de recuperación de contraseña.\"\"\"\n\n    def __init__(self, code_ttl: int = CODE_TTL_SECONDS, max_attempts: int = MAX_ATTEMPTS):\n        self._users: dict[str, User] = {}\n        self._codes: dict[str, RecoveryCode] = {}\n        self._code_ttl = code_ttl\n        self._max_attempts = max_attempts\n        # \"Bandeja de salida\" simulada: en producción sería un servicio de email/SMS.\n        self.outbox: list[tuple[str, str]] = []\n\n    # -- Registro de usuarios (soporte del escenario) ----------------------\n\n    def register_user(self, email: str, password: str) -> None:\n        self._users[email] = User(email=email, password_hash=self._hash_password(password))\n\n    # -- Paso 1: solicitar código ------------------------------------------\n\n    def request_code(self, email: str) -> None:\n        \"\"\"Genera un código de un solo uso y lo envía al usuario.\n\n        Pedir un código nuevo invalida automáticamente el anterior.\n        \"\"\"\n        if email not in self._users:\n            raise UserNotFoundError(f\"No existe ningún usuario con el correo {email!r}.\")\n\n        code = f\"{secrets.randbelow(1_000_000):06d}\"\n        self._codes[email] = RecoveryCode(\n            code=code,\n            expires_at=time.time() + self._code_ttl,\n            attempts_left=self._max_attempts,\n        )\n        self._send_code(email, code)\n\n    # -- Paso 2: el usuario recibe el código (simulado) ---------------------\n\n    def _send_code(self, email: str, code: str) -> None:\n        \"\"\"Simula el envío del código (email/SMS).\"\"\"\n        self.outbox.append((email, code))\n\n    # -- Paso 3: cambiar la contraseña --------------------------------------\n\n    def reset_password(self, email: str, code: str, new_password: str) -> None:\n        \"\"\"Verifica el código y, si es válido, establece la nueva contraseña.\"\"\"\n        if email not in self._users:\n            raise UserNotFoundError(f\"No existe ningún usuario con el correo {email!r}.\")\n\n        recovery = self._codes.get(email)\n        if recovery is None or recovery.used:\n            raise CodeNotRequestedError(\"No hay ningún código vigente; solicita uno nuevo.\")\n        if recovery.is_expired():\n            self._codes.pop(email, None)\n            raise CodeExpiredError(\"El código ha caducado; solicita uno nuevo.\")\n        if recovery.attempts_left <= 0:\n            self._codes.pop(email, None)\n            raise TooManyAttemptsError(\"Demasiados intentos; el código ha sido invalidado.\")\n\n        if not hmac.compare_digest(recovery.code, code):\n            recovery.attempts_left -= 1\n            raise InvalidCodeError(\n                f\"Código incorrecto. Intentos restantes: {recovery.attempts_left}.\"\n            )\n\n        self._validate_password(new_password)\n\n        # Éxito: el código se consume y se actualiza la contraseña.\n        recovery.used = True\n        self._codes.pop(email, None)\n        self._users[email].password_hash = self._hash_password(new_password)\n\n    # -- Utilidades ----------------------------------------------------------\n\n    def verify_password(self, email: str, password: str) -> bool:\n        \"\"\"Comprueba credenciales (para demostrar que el cambio funcionó).\"\"\"\n        user = self._users.get(email)\n        if user is None:\n            return False\n        salt, expected = user.password_hash.split(\"$\", 1)\n        candidate = hashlib.pbkdf2_hmac(\"sha256\", password.encode(), salt.encode(), 120_000).hex()\n        return hmac.compare_digest(expected, candidate)\n\n    @staticmethod\n    def _hash_password(password: str) -> str:\n        salt = secrets.token_hex(16)\n        digest = hashlib.pbkdf2_hmac(\"sha256\", password.encode(), salt.encode(), 120_000).hex()\n        return f\"{salt}${digest}\"\n\n    @staticmethod\n    def _validate_password(password: str) -> None:\n        if len(password) < MIN_PASSWORD_LENGTH:\n            raise WeakPasswordError(\n                f\"La contraseña debe tener al menos {MIN_PASSWORD_LENGTH} caracteres.\"\n            )\n\n\n# ---------------------------------------------------------------------------\n# Escenario de demostración\n# ---------------------------------------------------------------------------\n\ndef run_scenario() -> None:\n    service = PasswordRecoveryService()\n    email = \"ana@example.com\"\n\n    service.register_user(email, password=\"clave-antigua-1\")\n    print(f\"1. Usuario registrado: {email}\")\n\n    # El usuario pide el código.\n    service.request_code(email)\n    received_code = service.outbox[-1][1]  # el usuario lo lee de su correo\n    print(f\"2. Código solicitado y recibido por el usuario: {received_code}\")\n\n    # Un intento fallido no consume el código, pero resta intentos.\n    try:\n        service.reset_password(email, \"000000\", \"clave-nueva-2\")\n    except InvalidCodeError as exc:\n        print(f\"3. Intento con código erróneo -> {exc}\")\n\n    # Intento correcto: se cambia la contraseña.\n    service.reset_password(email, received_code, \"clave-nueva-2\")\n    print(\"4. Código correcto: contraseña actualizada.\")\n\n    # El código ya no puede reutilizarse.\n    try:\n        service.reset_password(email, received_code, \"otra-clave-3\")\n    except CodeNotRequestedError as exc:\n        print(f\"5. Reuso del código -> {exc}\")\n\n    # Verificación final de credenciales.\n    assert not service.verify_password(email, \"clave-antigua-1\")\n    assert service.verify_password(email, \"clave-nueva-2\")\n    print(\"6. Login con la contraseña antigua falla; con la nueva, funciona. ✅\")\n\n\nif __name__ == \"__main__\":\n    run_scenario()\n",
+                "range": {
+                  "startLineNumber": 1,
+                  "startColumn": 1,
+                  "endLineNumber": 1,
+                  "endColumn": 1
+                }
+              }
+            ],
+            []
+          ],
+          "done": true
+        },
+        {
+          "kind": "thinking",
+          "value": "Now run it to verify it works.",
+          "id": "1792774423534",
+          "reasoningDurationMs": 198,
+          "generatedTitle": "Executed command to verify functionality"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "Ahora verifico que el escenario se ejecuta correctamente: ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Running `python scenario.py`",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 5,
+            "source": "user"
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "terminal"
+          },
+          "toolSpecificData": {
+            "kind": "terminal",
+            "terminalToolSessionId": "1bfc2015-e2c9-45f2-a5d6-ffd44d4e2d7c",
+            "terminalCommandId": "tool-7310a70f-8145-4c95-ab96-bd130aea2c85",
+            "commandLine": {
+              "original": "python scenario.py",
+              "forDisplay": "python scenario.py",
+              "isSandboxWrapped": false
+            },
+            "cwd": {
+              "$mid": 1,
+              "fsPath": "c:\\Users\\<USER>\\trabajo\\app",
+              "_sep": 1,
+              "external": "file:///c%3A/Users/<USER>/trabajo/app",
+              "path": "/C:/Users/<USER>/trabajo/app",
+              "scheme": "file"
+            },
+            "language": "pwsh",
+            "isBackground": false,
+            "requestUnsandboxedExecution": false,
+            "requestAllowNetwork": false,
+            "confirmation": {
+              "commandLine": "python scenario.py"
+            },
+            "terminalCommandState": {
+              "timestamp": 1792774427937
+            }
+          },
+          "toolCallId": "call_74f1fbfd35c0483498af20b9",
+          "toolId": "run_in_terminal"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_74f1fbfd35c0483498af20b9"
+          }
+        },
+        {
+          "kind": "thinking",
+          "value": "The user skipped the execution. Fine — summarize the design briefly.",
+          "id": "1792774429764",
+          "reasoningDurationMs": 619,
+          "generatedTitle": "Reviewed design briefly"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "He creado ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "inlineReference",
+          "name": "scenario.py",
+          "inlineReference": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\scenario.py",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/scenario.py",
+            "path": "/C:/Users/<USER>/trabajo/app/scenario.py",
+            "scheme": "file"
+          }
+        },
+        {
+          "value": " con el flujo completo en un único archivo, sin tocar nada más.\n\n**Diseño del flujo:**\n\n1. **Solicitud** — `request_code(email)`: genera un código de 6 dígitos con `secrets`, lo guarda con caducidad y lo \"envía\" (bandeja `outbox` simulada).\n2. **Recepción** — el usuario lee el código del canal simulado.\n3. **Cambio de contraseña** — `reset_password(email, code, new_password)`: valida el código y actualiza el hash de la contraseña.\n\n**Restricciones de seguridad incluidas:**\n\n- Caducidad del código (10 min) y máximo 3 intentos; al agotarlos el código se invalida.\n- Código de un solo uso: usarlo o pedir uno nuevo invalida el anterior.\n- Comparación en tiempo constante con `hmac.compare_digest` (evita timing attacks).\n- Contraseñas hasheadas con PBKDF2-HMAC-SHA256 + salt; política mínima de 8 caracteres.\n- Excepciones de dominio específicas (`CodeExpiredError`, `TooManyAttemptsError`, etc.).\n\nLa función `run_scenario()` demuestra el flujo feliz más los casos de código incorrecto y reuso del código. Para probarlo: `python scenario.py` (solo usa la librería estándar).",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Created 2 todos",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Created 2 todos",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": [
+              {
+                "id": "1",
+                "title": "Diseñar flujo de recuperación de contraseña",
+                "status": "completed"
+              },
+              {
+                "id": "2",
+                "title": "Crear archivo scenario.py",
+                "status": "completed"
+              }
+            ]
+          },
+          "toolCallId": "e43d0d42-5ae5-4ba6-977b-19b58fac4733",
+          "toolId": "manage_todo_list"
+        }
+      ],
+      "agent": {
+        "extensionId": {
+          "value": "GitHub.copilot-chat",
+          "_lower": "github.copilot-chat"
+        },
+        "extensionVersion": "0.71.0",
+        "publisherDisplayName": "GitHub",
+        "extensionPublisherId": "GitHub",
+        "extensionDisplayName": "GitHub Copilot",
+        "id": "github.copilot.editsAgent",
+        "description": "Edit files in your workspace in agent mode",
+        "when": "config.chat.agent.enabled",
+        "metadata": {
+          "themeIcon": {
+            "id": "tools"
+          },
+          "hasFollowups": false,
+          "supportIssueReporting": false
+        },
+        "name": "agent",
+        "fullName": "GitHub Copilot",
+        "isDefault": true,
+        "locations": [
+          "panel"
+        ],
+        "modes": [
+          "agent"
+        ],
+        "slashCommands": [
+          {
+            "name": "compact",
+            "description": "Free up context by compacting the conversation history. Optionally include extra instructions for compaction."
+          },
+          {
+            "name": "explain",
+            "description": "Explain how the code in your active editor works"
+          },
+          {
+            "name": "tests",
+            "description": "Generate unit tests for the selected code",
+            "disambiguation": [
+              {
+                "category": "create_tests",
+                "description": "The user wants to generate unit tests.",
+                "examples": [
+                  "Generate tests for my selection using pytest."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "fix",
+            "description": "Propose a fix for the problems in the selected code",
+            "sampleRequest": "There is a problem in this code. Rewrite the code to show it with the bug fixed."
+          },
+          {
+            "name": "new",
+            "description": "Scaffold code for a new file or project in a workspace",
+            "sampleRequest": "Create a RESTful API server using typescript",
+            "isSticky": true,
+            "disambiguation": [
+              {
+                "category": "create_new_workspace_or_extension",
+                "description": "The user wants to create a complete Visual Studio Code workspace from scratch, such as a new application or a Visual Studio Code extension. Use this category only if the question relates to generating or creating new workspaces in Visual Studio Code. Do not use this category for updating existing code or generating sample code snippets",
+                "examples": [
+                  "Scaffold a Node server.",
+                  "Create a sample project which uses the fileSystemProvider API.",
+                  "react application"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "newNotebook",
+            "description": "Create a new Jupyter Notebook",
+            "sampleRequest": "How do I create a notebook to load data from a csv file?",
+            "disambiguation": [
+              {
+                "category": "create_jupyter_notebook",
+                "description": "The user wants to create a new Jupyter notebook in Visual Studio Code.",
+                "examples": [
+                  "Create a notebook to analyze this CSV file."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "setupTests",
+            "description": "Set up tests in your project (Experimental)",
+            "sampleRequest": "add playwright tests to my project",
+            "when": "config.github.copilot.chat.setupTests.enabled",
+            "disambiguation": [
+              {
+                "category": "set_up_tests",
+                "description": "The user wants to configure project test setup, framework, or test runner. The user does not want to fix their existing tests.",
+                "examples": [
+                  "Set up tests for this project."
+                ]
+              }
+            ]
+          }
+        ],
+        "disambiguation": []
+      },
+      "timestamp": 1792774369866,
+      "modelId": "copilot/kimi-k3",
+      "modelConfiguration": {
+        "reasoningEffort": "max"
+      },
+      "modeInfo": {
+        "kind": "agent",
+        "isBuiltin": true,
+        "telemetryModeId": "agent",
+        "telemetryModeName": "agent",
+        "permissionLevel": "default"
+      },
+      "responseId": "response_4fd75131-d453-4030-8ea1-a59e45c603e6",
+      "result": {
+        "timings": {
+          "firstProgress": 12460,
+          "totalElapsed": 69575
+        },
+        "metadata": {
+          "codeBlocks": [],
+          "renderedUserMessage": [
+            {
+              "type": 1,
+              "text": "<context>\nThe current date is 2026-10-23.\n</context>\n<reminderInstructions>\nWhen using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.\nFor maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying \"I'll implement all the changes using multi_replace_string_in_file\").\n\nDon't re-read a file or line range that is still available in your current context — re-reading it only wastes a tool call. Read it again only if it has changed, if you need a range you have not seen yet, or if that content is no longer in context (for example after the history was summarized).\n</reminderInstructions>\n<userRequest>\nDiseña el flujo de recuperación de contraseña: el usuario pide un código, lo recibe y cambia su contraseña. Hazlo como un único archivo nuevo llamado scenario.py. No modifiques ni crees ningún otro archivo.\n</userRequest>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "promptTokens": 22091,
+          "outputTokens": 363,
+          "toolCallRounds": [
+            {
+              "response": "",
+              "toolCalls": [
+                {
+                  "name": "create_file",
+                  "arguments": "{\"content\": \"\\\"\\\"\\\"Escenario: flujo de recuperación de contraseña.\\n\\nPasos del flujo:\\n    1. El usuario solicita un código de recuperación.\\n    2. El sistema genera el código, lo almacena con caducidad y lo \\\"envía\\\".\\n    3. El usuario introduce el código recibido y establece una nueva contraseña.\\n\\nDiseño (solo librería estándar, almacenamiento en memoria):\\n    - Códigos de 6 dígitos generados con `secrets` (aleatoriedad criptográfica).\\n    - Caducidad del código (10 min) y máximo de intentos de verificación (3).\\n    - Comparación en tiempo constante con `hmac.compare_digest`.\\n    - El código es de un solo uso: pedir uno nuevo o usarlo lo invalida.\\n    - Las contraseñas se guardan hasheadas (PBKDF2-HMAC-SHA256 + salt).\\n\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport hashlib\\nimport hmac\\nimport secrets\\nimport time\\nfrom dataclasses import dataclass, field\\n\\n\\n# ---------------------------------------------------------------------------\\n# Excepciones del dominio\\n# ---------------------------------------------------------------------------\\n\\nclass RecoveryError(Exception):\\n    \\\"\\\"\\\"Error base del flujo de recuperación.\\\"\\\"\\\"\\n\\n\\nclass UserNotFoundError(RecoveryError):\\n    \\\"\\\"\\\"El correo no corresponde a ningún usuario registrado.\\\"\\\"\\\"\\n\\n\\nclass CodeNotRequestedError(RecoveryError):\\n    \\\"\\\"\\\"No hay ningún código vigente para ese usuario.\\\"\\\"\\\"\\n\\n\\nclass CodeExpiredError(RecoveryError):\\n    \\\"\\\"\\\"El código ha caducado.\\\"\\\"\\\"\\n\\n\\nclass InvalidCodeError(RecoveryError):\\n    \\\"\\\"\\\"El código introducido no coincide.\\\"\\\"\\\"\\n\\n\\nclass TooManyAttemptsError(RecoveryError):\\n    \\\"\\\"\\\"Se superó el número máximo de intentos; el código queda invalidado.\\\"\\\"\\\"\\n\\n\\nclass WeakPasswordError(RecoveryError):\\n    \\\"\\\"\\\"La nueva contraseña no cumple la política mínima.\\\"\\\"\\\"\\n\\n\\n# ---------------------------------------------------------------------------\\n# Modelos\\n# ---------------------------------------------------------------------------\\n\\n@dataclass\\nclass User:\\n    email: str\\n    password_hash: str\\n\\n\\n@dataclass\\nclass RecoveryCode:\\n    code: str\\n    expires_at: float\\n    attempts_left: int = 3\\n    used: bool = False\\n\\n    def is_expired(self, now: float | None = None) -> bool:\\n        return (now or time.time()) >= self.expires_at\\n\\n\\n# ---------------------------------------------------------------------------\\n# Servicio de recuperación\\n# ---------------------------------------------------------------------------\\n\\nCODE_TTL_SECONDS = 10 * 60   # 10 minutos\\nMAX_ATTEMPTS = 3\\nMIN_PASSWORD_LENGTH = 8\\n\\n\\nclass PasswordRecoveryService:\\n    \\\"\\\"\\\"Gestiona usuarios y el flujo de recuperación de contraseña.\\\"\\\"\\\"\\n\\n    def __init__(self, code_ttl: int = CODE_TTL_SECONDS, max_attempts: int = MAX_ATTEMPTS):\\n        self._users: dict[str, User] = {}\\n        self._codes: dict[str, RecoveryCode] = {}\\n        self._code_ttl = code_ttl\\n        self._max_attempts = max_attempts\\n        # \\\"Bandeja de salida\\\" simulada: en producción sería un servicio de email/SMS.\\n        self.outbox: list[tuple[str, str]] = []\\n\\n    # -- Registro de usuarios (soporte del escenario) ----------------------\\n\\n    def register_user(self, email: str, password: str) -> None:\\n        self._users[email] = User(email=email, password_hash=self._hash_password(password))\\n\\n    # -- Paso 1: solicitar código ------------------------------------------\\n\\n    def request_code(self, email: str) -> None:\\n        \\\"\\\"\\\"Genera un código de un solo uso y lo envía al usuario.\\n\\n        Pedir un código nuevo invalida automáticamente el anterior.\\n        \\\"\\\"\\\"\\n        if email not in self._users:\\n            raise UserNotFoundError(f\\\"No existe ningún usuario con el correo {email!r}.\\\")\\n\\n        code = f\\\"{secrets.randbelow(1_000_000):06d}\\\"\\n        self._codes[email] = RecoveryCode(\\n            code=code,\\n            expires_at=time.time() + self._code_ttl,\\n            attempts_left=self._max_attempts,\\n        )\\n        self._send_code(email, code)\\n\\n    # -- Paso 2: el usuario recibe el código (simulado) ---------------------\\n\\n    def _send_code(self, email: str, code: str) -> None:\\n        \\\"\\\"\\\"Simula el envío del código (email/SMS).\\\"\\\"\\\"\\n        self.outbox.append((email, code))\\n\\n    # -- Paso 3: cambiar la contraseña --------------------------------------\\n\\n    def reset_password(self, email: str, code: str, new_password: str) -> None:\\n        \\\"\\\"\\\"Verifica el código y, si es válido, establece la nueva contraseña.\\\"\\\"\\\"\\n        if email not in self._users:\\n            raise UserNotFoundError(f\\\"No existe ningún usuario con el correo {email!r}.\\\")\\n\\n        recovery = self._codes.get(email)\\n        if recovery is None or recovery.used:\\n            raise CodeNotRequestedError(\\\"No hay ningún código vigente; solicita uno nuevo.\\\")\\n        if recovery.is_expired():\\n            self._codes.pop(email, None)\\n            raise CodeExpiredError(\\\"El código ha caducado; solicita uno nuevo.\\\")\\n        if recovery.attempts_left <= 0:\\n            self._codes.pop(email, None)\\n            raise TooManyAttemptsError(\\\"Demasiados intentos; el código ha sido invalidado.\\\")\\n\\n        if not hmac.compare_digest(recovery.code, code):\\n            recovery.attempts_left -= 1\\n            raise InvalidCodeError(\\n                f\\\"Código incorrecto. Intentos restantes: {recovery.attempts_left}.\\\"\\n            )\\n\\n        self._validate_password(new_password)\\n\\n        # Éxito: el código se consume y se actualiza la contraseña.\\n        recovery.used = True\\n        self._codes.pop(email, None)\\n        self._users[email].password_hash = self._hash_password(new_password)\\n\\n    # -- Utilidades ----------------------------------------------------------\\n\\n    def verify_password(self, email: str, password: str) -> bool:\\n        \\\"\\\"\\\"Comprueba credenciales (para demostrar que el cambio funcionó).\\\"\\\"\\\"\\n        user = self._users.get(email)\\n        if user is None:\\n            return False\\n        salt, expected = user.password_hash.split(\\\"$\\\", 1)\\n        candidate = hashlib.pbkdf2_hmac(\\\"sha256\\\", password.encode(), salt.encode(), 120_000).hex()\\n        return hmac.compare_digest(expected, candidate)\\n\\n    @staticmethod\\n    def _hash_password(password: str) -> str:\\n        salt = secrets.token_hex(16)\\n        digest = hashlib.pbkdf2_hmac(\\\"sha256\\\", password.encode(), salt.encode(), 120_000).hex()\\n        return f\\\"{salt}${digest}\\\"\\n\\n    @staticmethod\\n    def _validate_password(password: str) -> None:\\n        if len(password) < MIN_PASSWORD_LENGTH:\\n            raise WeakPasswordError(\\n                f\\\"La contraseña debe tener al menos {MIN_PASSWORD_LENGTH} caracteres.\\\"\\n            )\\n\\n\\n# ---------------------------------------------------------------------------\\n# Escenario de demostración\\n# ---------------------------------------------------------------------------\\n\\ndef run_scenario() -> None:\\n    service = PasswordRecoveryService()\\n    email = \\\"ana@example.com\\\"\\n\\n    service.register_user(email, password=\\\"clave-antigua-1\\\")\\n    print(f\\\"1. Usuario registrado: {email}\\\")\\n\\n    # El usuario pide el código.\\n    service.request_code(email)\\n    received_code = service.outbox[-1][1]  # el usuario lo lee de su correo\\n    print(f\\\"2. Código solicitado y recibido por el usuario: {received_code}\\\")\\n\\n    # Un intento fallido no consume el código, pero resta intentos.\\n    try:\\n        service.reset_password(email, \\\"000000\\\", \\\"clave-nueva-2\\\")\\n    except InvalidCodeError as exc:\\n        print(f\\\"3. Intento con código erróneo -> {exc}\\\")\\n\\n    # Intento correcto: se cambia la contraseña.\\n    service.reset_password(email, received_code, \\\"clave-nueva-2\\\")\\n    print(\\\"4. Código correcto: contraseña actualizada.\\\")\\n\\n    # El código ya no puede reutilizarse.\\n    try:\\n        service.reset_password(email, received_code, \\\"otra-clave-3\\\")\\n    except CodeNotRequestedError as exc:\\n        print(f\\\"5. Reuso del código -> {exc}\\\")\\n\\n    # Verificación final de credenciales.\\n    assert not service.verify_password(email, \\\"clave-antigua-1\\\")\\n    assert service.verify_password(email, \\\"clave-nueva-2\\\")\\n    print(\\\"6. Login con la contraseña antigua falla; con la nueva, funciona. ✅\\\")\\n\\n\\nif __name__ == \\\"__main__\\\":\\n    run_scenario()\\n\", \"filePath\": \"c:\\\\Users\\\\<USER>\\\\trabajo\\\\app\\\\scenario.py\"}",
+                  "id": "call_c8d12b8ab9db4adc8df8e281__vscode-1792774331173"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "26386f7b-759d-41e4-a05d-7ff87e4194b5",
+              "thinking": {
+                "id": "a53d531f-b911-455f-ad63-25b651424e64",
+                "text": "The user wants me to design a password recovery flow: user requests a code, receives it, and changes their password. As a single new file called scenario.py. No other files should be modified or created.\n\nThe workspace is at c:\\Users\\<USER>\\trabajo\\app (empty except .git). I'll create scenario.py there.\n\n\"Diseña el flujo\" — design the flow. Since it's a \"scenario.py\", it seems like a demonstration/simulation of the flow. I should write a self-contained Python file that models the password recovery flow: request code → send/receive code → verify code → change password. With in-memory storage, secure code generation (secrets), expiration, hashing of passwords, attempt limits, etc.\n\nKeep it as a single file, well-structured, no external dependencies (standard library only). Include a demo main that runs the scenario: user requests code, receives it (simulated), changes password.\n\nLet me design:\n\n- `PasswordRecoveryService` class\n- User store (in-memory dict) with hashed passwords (hashlib pbkdf2 or sha256 with salt)\n- `request_code(email)` → generates 6-digit code with `secrets`, stores with expiry (e.g., 10 min), max attempts; \"sends\" via a sender function (simulated outbox/print).\n- `verify_code(email, code)` → checks existence, expiry, attempts; constant-time compare with hmac.compare_digest.\n- `reset_password(email, code, new_password)` → verifies code, validates password policy, updates hash, invalidates code.\n- One-time use codes; requesting a new code invalidates the previous.\n- Demo in `if __name__ == \"__main__\":` running the three steps.\n\nKeep answers short. Create the file with create_file. The file should be in Spanish comments probably, since user speaks Spanish. I'll write docstrings/comments in Spanish.\n\nLet me write it cleanly.",
+                "metadata": {
+                  "toolId": "call_c8d12b8ab9db4adc8df8e281"
+                }
+              },
+              "timestamp": 1792774421908,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "Ahora verifico que el escenario se ejecuta correctamente: ",
+              "toolCalls": [
+                {
+                  "name": "run_in_terminal",
+                  "arguments": "{\"command\": \"python scenario.py\", \"explanation\": \"Ejecuta el escenario de recuperación de contraseña para validarlo.\", \"goal\": \"Validar la ejecución de scenario.py\", \"mode\": \"sync\"}",
+                  "id": "call_74f1fbfd35c0483498af20b9__vscode-1792774331174"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "a7f6ff4f-66bd-4222-a7eb-2aa7f916e3c0",
+              "thinking": {
+                "id": "5b7ea9f8-6c24-4912-ac61-b514399785e4",
+                "text": "Now run it to verify it works.",
+                "metadata": {
+                  "toolId": "call_74f1fbfd35c0483498af20b9"
+                }
+              },
+              "timestamp": 1792774425771,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "He creado [scenario.py](scenario.py) con el flujo completo en un único archivo, sin tocar nada más.\n\n**Diseño del flujo:**\n\n1. **Solicitud** — `request_code(email)`: genera un código de 6 dígitos con `secrets`, lo guarda con caducidad y lo \"envía\" (bandeja `outbox` simulada).\n2. **Recepción** — el usuario lee el código del canal simulado.\n3. **Cambio de contraseña** — `reset_password(email, code, new_password)`: valida el código y actualiza el hash de la contraseña.\n\n**Restricciones de seguridad incluidas:**\n\n- Caducidad del código (10 min) y máximo 3 intentos; al agotarlos el código se invalida.\n- Código de un solo uso: usarlo o pedir uno nuevo invalida el anterior.\n- Comparación en tiempo constante con `hmac.compare_digest` (evita timing attacks).\n- Contraseñas hasheadas con PBKDF2-HMAC-SHA256 + salt; política mínima de 8 caracteres.\n- Excepciones de dominio específicas (`CodeExpiredError`, `TooManyAttemptsError`, etc.).\n\nLa función `run_scenario()` demuestra el flujo feliz más los casos de código incorrecto y reuso del código. Para probarlo: `python scenario.py` (solo usa la librería estándar).",
+              "toolCalls": [],
+              "toolInputRetry": 0,
+              "id": "715e0591-1a56-49dc-9cdd-9f1fa2d3f1a5",
+              "thinking": {
+                "id": "fa082f63-e106-4f91-9b3b-9fe8a1ee6dcd",
+                "text": "The user skipped the execution. Fine — summarize the design briefly."
+              },
+              "timestamp": 1792774438654,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            }
+          ],
+          "toolCallResults": {
+            "call_c8d12b8ab9db4adc8df8e281__vscode-1792774331173": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "HS",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "The following files were successfully edited:",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "c:\\Users\\<USER>\\trabajo\\app\\scenario.py",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_74f1fbfd35c0483498af20b9__vscode-1792774331174": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 21,
+                  "value": "The user chose to skip the tool call, they want to proceed without running it"
+                }
+              ]
+            }
+          },
+          "resolvedModel": "kimi-k3",
+          "modelMessageId": "e9f08df4-3ee6-439e-9865-41c5c9c48ace",
+          "responseId": "0bd765bd-434e-441d-8a1e-9402d0611095",
+          "sessionId": "e69b5c00-7d65-46be-81b2-e5097a618490",
+          "agentId": "github.copilot.editsAgent"
+        },
+        "details": "Kimi K3 • 7.8 credits"
+      },
+      "followups": [],
+      "modelState": {
+        "value": 1,
+        "completedAt": 1792774439526
+      },
+      "contentReferences": [],
+      "codeCitations": [],
+      "responseTimestamp": 1792774369866,
+      "timeSpentWaiting": 2094,
+      "promptTokens": 22091,
+      "completionTokens": 2860,
+      "outputBuffer": 131072,
+      "promptTokenDetails": [
+        {
+          "category": "System",
+          "label": "System Instructions",
+          "percentageOfPrompt": 20
+        },
+        {
+          "category": "System",
+          "label": "Tool Definitions",
+          "percentageOfPrompt": 59
+        },
+        {
+          "category": "User Context",
+          "label": "Messages",
+          "percentageOfPrompt": 20
+        },
+        {
+          "category": "User Context",
+          "label": "Tool Results",
+          "percentageOfPrompt": 1
+        }
+      ],
+      "copilotCredits": 7.79406,
+      "elapsedMs": 67566
+    }
+  ]
+}
