@@ -1,0 +1,1607 @@
+{
+  "responderUsername": "GitHub Copilot",
+  "initialLocation": "panel",
+  "requests": [
+    {
+      "requestId": "request_6fd8a0d2-9da5-43f1-bb68-23779d705974",
+      "message": {
+        "parts": [
+          {
+            "range": {
+              "start": 0,
+              "endExclusive": 125
+            },
+            "editorRange": {
+              "startLineNumber": 1,
+              "startColumn": 1,
+              "endLineNumber": 1,
+              "endColumn": 126
+            },
+            "text": "¿Cuáles son las principales convenciones y restricciones definidas para este proyecto, y qué Agent Skills tienes disponibles?",
+            "kind": "text"
+          }
+        ],
+        "text": "¿Cuáles son las principales convenciones y restricciones definidas para este proyecto, y qué Agent Skills tienes disponibles?"
+      },
+      "variableData": {
+        "variables": []
+      },
+      "response": [
+        {
+          "kind": "mcpServersStarting",
+          "didStartServerIds": []
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "presentation": "hidden",
+          "invocationMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": []
+          },
+          "toolCallId": "b020978e-edba-439d-89ac-5517b56baf62",
+          "toolId": "manage_todo_list"
+        },
+        {
+          "kind": "thinking",
+          "value": "The user is asking in Spanish: \"What are the main conventions and restrictions defined for this project, and what Agent Skills do you have available?\"\n\nLet me break this down:\n1. Project conventions and restrictions - I should look for instruction files, AGENTS.md, copilot-instructions.md, .instructions.md files in the workspace, and also check repo memory (which is empty).\n2. Agent Skills available - I have the list from my system prompt: project-setup-info-local, get-search-view-results, agent-customization, chronicle.\n\nLet me first search the workspace for convention/instruction files. The workspace structure shown is empty (truncated?), so let me explore.\n\nI should:\n- Search for AGENTS.md, copilot-instructions.md, *.instructions.md, *.agent.md, *.prompt.md, SKILL.md files in the workspace\n- Check .github folder\n- List the workspace directory\n\nLet me do parallel tool calls: list_dir on the workspace root, and file_search for common convention files.\n\nThen I'll answer about the skills from my system prompt knowledge.\n\nLet me respond in Spanish since the user asked in Spanish.",
+          "id": "1792767080091",
+          "reasoningDurationMs": 5696,
+          "generatedTitle": "Searched for project conventions and available Agent Skills"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "Voy a revisar el workspace en busca de archivos de convenciones e instrucciones del proyecto. ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_2f952e929ab54dadb249697f"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Reading [](file:///c%3A/Users/<USER>/trabajo/app)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Read [](file:///c%3A/Users/<USER>/trabajo/app)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "call_2f952e929ab54dadb249697f",
+          "toolId": "copilot_listDirectory"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Searching for files matching `**/{AGENTS.md,agents.md,copilot-instructions.md,*.instructions.md,*.agent.md,*.prompt.md,SKILL.md,CLAUDE.md,.cursorrules,.windsurfrules}`",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "pastTenseMessage": {
+            "value": "Searched for files matching `**/{AGENTS.md,agents.md,copilot-instructions.md,*.instructions.md,*.agent.md,*.prompt.md,SKILL.md,CLAUDE.md,.cursorrules,.windsurfrules}`, no matches",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "resultDetails": [],
+          "toolCallId": "call_e06a52aeb4a54d55a99647a5",
+          "toolId": "copilot_findFiles"
+        },
+        {
+          "kind": "thinking",
+          "value": "The workspace only contains a .git folder — it's essentially an empty repository. No instruction files, no AGENTS.md, no copilot-instructions.md, nothing.\n\nLet me also check if there are any user-level customization files in the prompts folder, and check .git for any hints. Actually, let me check the VSCODE_USER_PROMPTS_FOLDER for user-level prompts/instructions, and maybe check the .git config to see what repo this is.\n\nActually, the question has two parts:\n1. Project conventions and restrictions — the workspace is empty (only .git), so there are NO project-defined conventions. I could check .git/config to see the remote for hints, but there are no files.\n2. Agent Skills available — I know these from my system prompt: project-setup-info-local, get-search-view-results, agent-customization, chronicle. And agents: Explore.\n\nLet me quickly check the git config for context and the user prompts folder.",
+          "id": "1792767089995",
+          "reasoningDurationMs": 4540,
+          "generatedTitle": "Reviewed workspace and analyzed project conventions and restrictions"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_fbfc2af27d274623a6c24637"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Searching for files matching `c:\\Users\\<USER>\\AppData\\Roaming\\Code\\User\\prompts\\**/*`",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "pastTenseMessage": {
+            "value": "Searched for files matching `c:\\Users\\<USER>\\AppData\\Roaming\\Code\\User\\prompts\\**/*`, no matches",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {}
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "resultDetails": [],
+          "toolCallId": "call_fbfc2af27d274623a6c24637",
+          "toolId": "copilot_findFiles"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Reading [](file:///c%3A/Users/<USER>/trabajo/app/.git/config)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/.git/config": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/.git/config",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Read [](file:///c%3A/Users/<USER>/trabajo/app/.git/config)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/.git/config": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/.git/config",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "call_3d1fc74bcef24397a5fddc57",
+          "toolId": "copilot_readFile"
+        },
+        {
+          "kind": "thinking",
+          "value": "Confirmed: the workspace is a fresh git repo with no files, no remote, no instruction files. There are no project-specific conventions defined.\n\nNow I can answer both parts:\n1. Conventions/restrictions: None defined in the project. The only applicable ones are my base operating rules (from system prompt): file linkification format, tool preferences, memory guidelines, etc. I should be honest that the project itself defines none.\n2. Agent Skills available: the 4 skills from the list, plus the Explore subagent.\n\nKeep it short and impersonal, respond in Spanish.",
+          "id": "1792767099232",
+          "reasoningDurationMs": 2746,
+          "generatedTitle": "Confirmó que no había convenciones definidas en el proyecto"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "## Convenciones y restricciones del proyecto\n\n**El proyecto no define ninguna convención propia.** El workspace ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "inlineReference",
+          "inlineReference": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app",
+            "path": "/c:/Users/<USER>/trabajo/app",
+            "scheme": "file"
+          }
+        },
+        {
+          "value": " está prácticamente vacío: solo contiene un repositorio Git recién inicializado (sin remoto, sin commits de código). No existen archivos de instrucciones como AGENTS.md, copilot-instructions.md, .instructions.md, ni reglas de estilo, linters o configuraciones de framework.\n\nLas únicas reglas aplicables son las de mi operación base en VS Code, entre ellas:\n\n- **Referencias a archivos**: siempre como enlaces Markdown con rutas relativas al workspace y líneas 1-based, sin backticks (ej. src/app.ts).\n- **Preferencia de herramientas**: usar herramientas integradas (búsqueda, lectura, edición) en lugar de comandos de terminal equivalentes (`cat`, `grep`, `find`, etc.).\n- **Edición de archivos**: nunca modificar archivos mediante comandos de terminal; usar las herramientas de edición con contexto suficiente (3-5 líneas antes y después).\n- **Contenido**: seguir las políticas de contenido de Microsoft y no generar contenido dañino ni que viole copyrights.\n- **Memoria**: no hay notas previas guardadas (memoria de usuario, sesión y repositorio están vacías).\n\nSi quieres establecer convenciones para este proyecto (por ejemplo, un AGENTS.md o instrucciones personalizadas), puedo crearlas.\n\n## Agent Skills disponibles\n\n| Skill | Propósito |\n|---|---|\n| **project-setup-info-local** | Scaffolding completo de proyectos nuevos (TypeScript, React, Next.js, servidores Node, extensiones de VS Code, servidores MCP). |\n| **get-search-view-results** | Obtener los resultados actuales de la vista de Búsqueda de VS Code. |\n| **agent-customization** | Crear, revisar o depurar archivos de personalización de agentes (.instructions.md, .prompt.md, .agent.md, SKILL.md, AGENTS.md). |\n| **chronicle** | Analizar el historial de sesiones de Copilot: reportes de standup, búsqueda de sesiones pasadas, consejos de uso y reindexación. |\n\nAdemás, tengo disponible el subagente **Explore**, para exploración rápida de código de solo lectura (útil cuando el workspace crezca).",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Created 3 todos",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Created 3 todos",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": [
+              {
+                "id": "1",
+                "title": "Search for project conventions and restrictions",
+                "status": "completed"
+              },
+              {
+                "id": "2",
+                "title": "Check for user-level customization files",
+                "status": "completed"
+              },
+              {
+                "id": "3",
+                "title": "List available Agent Skills",
+                "status": "not-started"
+              }
+            ]
+          },
+          "toolCallId": "e4b3d14a-4937-4785-bada-ab7b39b930a6",
+          "toolId": "manage_todo_list"
+        }
+      ],
+      "agent": {
+        "extensionId": {
+          "value": "GitHub.copilot-chat",
+          "_lower": "github.copilot-chat"
+        },
+        "extensionVersion": "0.71.0",
+        "publisherDisplayName": "GitHub",
+        "extensionPublisherId": "GitHub",
+        "extensionDisplayName": "GitHub Copilot",
+        "id": "github.copilot.editsAgent",
+        "description": "Edit files in your workspace in agent mode",
+        "when": "config.chat.agent.enabled",
+        "metadata": {
+          "themeIcon": {
+            "id": "tools"
+          },
+          "hasFollowups": false,
+          "supportIssueReporting": false
+        },
+        "name": "agent",
+        "fullName": "GitHub Copilot",
+        "isDefault": true,
+        "locations": [
+          "panel"
+        ],
+        "modes": [
+          "agent"
+        ],
+        "slashCommands": [
+          {
+            "name": "compact",
+            "description": "Free up context by compacting the conversation history. Optionally include extra instructions for compaction."
+          },
+          {
+            "name": "explain",
+            "description": "Explain how the code in your active editor works"
+          },
+          {
+            "name": "tests",
+            "description": "Generate unit tests for the selected code",
+            "disambiguation": [
+              {
+                "category": "create_tests",
+                "description": "The user wants to generate unit tests.",
+                "examples": [
+                  "Generate tests for my selection using pytest."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "fix",
+            "description": "Propose a fix for the problems in the selected code",
+            "sampleRequest": "There is a problem in this code. Rewrite the code to show it with the bug fixed."
+          },
+          {
+            "name": "new",
+            "description": "Scaffold code for a new file or project in a workspace",
+            "sampleRequest": "Create a RESTful API server using typescript",
+            "isSticky": true,
+            "disambiguation": [
+              {
+                "category": "create_new_workspace_or_extension",
+                "description": "The user wants to create a complete Visual Studio Code workspace from scratch, such as a new application or a Visual Studio Code extension. Use this category only if the question relates to generating or creating new workspaces in Visual Studio Code. Do not use this category for updating existing code or generating sample code snippets",
+                "examples": [
+                  "Scaffold a Node server.",
+                  "Create a sample project which uses the fileSystemProvider API.",
+                  "react application"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "newNotebook",
+            "description": "Create a new Jupyter Notebook",
+            "sampleRequest": "How do I create a notebook to load data from a csv file?",
+            "disambiguation": [
+              {
+                "category": "create_jupyter_notebook",
+                "description": "The user wants to create a new Jupyter notebook in Visual Studio Code.",
+                "examples": [
+                  "Create a notebook to analyze this CSV file."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "setupTests",
+            "description": "Set up tests in your project (Experimental)",
+            "sampleRequest": "add playwright tests to my project",
+            "when": "config.github.copilot.chat.setupTests.enabled",
+            "disambiguation": [
+              {
+                "category": "set_up_tests",
+                "description": "The user wants to configure project test setup, framework, or test runner. The user does not want to fix their existing tests.",
+                "examples": [
+                  "Set up tests for this project."
+                ]
+              }
+            ]
+          }
+        ],
+        "disambiguation": []
+      },
+      "timestamp": 1792767077945,
+      "modelId": "copilot/kimi-k3",
+      "modelConfiguration": {
+        "reasoningEffort": "max"
+      },
+      "modeInfo": {
+        "kind": "agent",
+        "isBuiltin": true,
+        "telemetryModeId": "agent",
+        "telemetryModeName": "agent",
+        "permissionLevel": "default"
+      },
+      "responseId": "response_43ad2572-093a-4836-8427-9cbd591dfd4b",
+      "result": {
+        "timings": {
+          "firstProgress": 7606,
+          "totalElapsed": 39106
+        },
+        "metadata": {
+          "codeBlocks": [],
+          "renderedUserMessage": [
+            {
+              "type": 1,
+              "text": "<context>\nThe current date is 2026-10-23.\n</context>\n<reminderInstructions>\nWhen using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.\nFor maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying \"I'll implement all the changes using multi_replace_string_in_file\").\n\nDon't re-read a file or line range that is still available in your current context — re-reading it only wastes a tool call. Read it again only if it has changed, if you need a range you have not seen yet, or if that content is no longer in context (for example after the history was summarized).\n</reminderInstructions>\n<userRequest>\n¿Cuáles son las principales convenciones y restricciones definidas para este proyecto, y qué Agent Skills tienes disponibles?\n</userRequest>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "renderedGlobalContext": [
+            {
+              "type": 1,
+              "text": "<environment_info>\nThe user's current OS is: Windows\n</environment_info>\n<workspace_info>\nI am working in a workspace with the following folders:\n- c:\\Users\\<USER>\\trabajo\\app \nI am working in a workspace that has the following structure:\n```\n\n```\nThis is the state of the context at this point in the conversation. The view of the workspace structure may be truncated. You can use tools to collect more context if needed.\n</workspace_info>\n<userMemory>\nNo user preferences or notes saved yet. Use the memory tool to store persistent notes under /memories/.\n</userMemory>\n<sessionMemory>\nSession memory (/memories/session/) is empty. No session notes have been created yet.\n</sessionMemory>\n<repoMemory>\nRepository memory (/memories/repo/) is empty. No workspace-scoped notes have been created yet.\n</repoMemory>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "cacheKey": "file:///c%3A/Users/<USER>/trabajo/app",
+          "promptTokens": 18852,
+          "outputTokens": 705,
+          "toolCallRounds": [
+            {
+              "response": "Voy a revisar el workspace en busca de archivos de convenciones e instrucciones del proyecto. ",
+              "toolCalls": [
+                {
+                  "name": "list_dir",
+                  "arguments": "{\"path\": \"c:\\\\Users\\\\<USER>\\\\trabajo\\\\app\"}",
+                  "id": "call_2f952e929ab54dadb249697f__vscode-1792767072494"
+                },
+                {
+                  "name": "file_search",
+                  "arguments": "{\"query\": \"**/{AGENTS.md,agents.md,copilot-instructions.md,*.instructions.md,*.agent.md,*.prompt.md,SKILL.md,CLAUDE.md,.cursorrules,.windsurfrules}\"}",
+                  "id": "call_e06a52aeb4a54d55a99647a5__vscode-1792767072495"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "9fba1476-5adc-47ef-b75c-02e7c252c604",
+              "thinking": {
+                "id": "b71b8b7c-3724-4abe-9148-b8c14f33c7cc",
+                "text": "The user is asking in Spanish: \"What are the main conventions and restrictions defined for this project, and what Agent Skills do you have available?\"\n\nLet me break this down:\n1. Project conventions and restrictions - I should look for instruction files, AGENTS.md, copilot-instructions.md, .instructions.md files in the workspace, and also check repo memory (which is empty).\n2. Agent Skills available - I have the list from my system prompt: project-setup-info-local, get-search-view-results, agent-customization, chronicle.\n\nLet me first search the workspace for convention/instruction files. The workspace structure shown is empty (truncated?), so let me explore.\n\nI should:\n- Search for AGENTS.md, copilot-instructions.md, *.instructions.md, *.agent.md, *.prompt.md, SKILL.md files in the workspace\n- Check .github folder\n- List the workspace directory\n\nLet me do parallel tool calls: list_dir on the workspace root, and file_search for common convention files.\n\nThen I'll answer about the skills from my system prompt knowledge.\n\nLet me respond in Spanish since the user asked in Spanish.",
+                "metadata": {
+                  "toolId": "call_2f952e929ab54dadb249697f"
+                }
+              },
+              "timestamp": 1792767088505,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "",
+              "toolCalls": [
+                {
+                  "name": "file_search",
+                  "arguments": "{\"query\": \"c:\\\\Users\\\\<USER>\\\\AppData\\\\Roaming\\\\Code\\\\User\\\\prompts\\\\**/*\"}",
+                  "id": "call_fbfc2af27d274623a6c24637__vscode-1792767072496"
+                },
+                {
+                  "name": "read_file",
+                  "arguments": "{\"endLine\": 30, \"filePath\": \"c:\\\\Users\\\\<USER>\\\\trabajo\\\\app\\\\.git\\\\config\", \"startLine\": 1}",
+                  "id": "call_3d1fc74bcef24397a5fddc57__vscode-1792767072497"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "db0f4633-126e-4f73-a9bd-8d1e12502580",
+              "thinking": {
+                "id": "19e1f6b3-7c7f-40ec-972b-be0eaed7ea51",
+                "text": "The workspace only contains a .git folder — it's essentially an empty repository. No instruction files, no AGENTS.md, no copilot-instructions.md, nothing.\n\nLet me also check if there are any user-level customization files in the prompts folder, and check .git for any hints. Actually, let me check the VSCODE_USER_PROMPTS_FOLDER for user-level prompts/instructions, and maybe check the .git config to see what repo this is.\n\nActually, the question has two parts:\n1. Project conventions and restrictions — the workspace is empty (only .git), so there are NO project-defined conventions. I could check .git/config to see the remote for hints, but there are no files.\n2. Agent Skills available — I know these from my system prompt: project-setup-info-local, get-search-view-results, agent-customization, chronicle. And agents: Explore.\n\nLet me quickly check the git config for context and the user prompts folder.",
+                "metadata": {
+                  "toolId": "call_fbfc2af27d274623a6c24637"
+                }
+              },
+              "timestamp": 1792767097084,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "## Convenciones y restricciones del proyecto\n\n**El proyecto no define ninguna convención propia.** El workspace `c:\\Users\\<USER>\\trabajo\\app` está prácticamente vacío: solo contiene un repositorio Git recién inicializado (sin remoto, sin commits de código). No existen archivos de instrucciones como AGENTS.md, copilot-instructions.md, .instructions.md, ni reglas de estilo, linters o configuraciones de framework.\n\nLas únicas reglas aplicables son las de mi operación base en VS Code, entre ellas:\n\n- **Referencias a archivos**: siempre como enlaces Markdown con rutas relativas al workspace y líneas 1-based, sin backticks (ej. [src/app.ts](src/app.ts#L10)).\n- **Preferencia de herramientas**: usar herramientas integradas (búsqueda, lectura, edición) en lugar de comandos de terminal equivalentes (`cat`, `grep`, `find`, etc.).\n- **Edición de archivos**: nunca modificar archivos mediante comandos de terminal; usar las herramientas de edición con contexto suficiente (3-5 líneas antes y después).\n- **Contenido**: seguir las políticas de contenido de Microsoft y no generar contenido dañino ni que viole copyrights.\n- **Memoria**: no hay notas previas guardadas (memoria de usuario, sesión y repositorio están vacías).\n\nSi quieres establecer convenciones para este proyecto (por ejemplo, un AGENTS.md o instrucciones personalizadas), puedo crearlas.\n\n## Agent Skills disponibles\n\n| Skill | Propósito |\n|---|---|\n| **project-setup-info-local** | Scaffolding completo de proyectos nuevos (TypeScript, React, Next.js, servidores Node, extensiones de VS Code, servidores MCP). |\n| **get-search-view-results** | Obtener los resultados actuales de la vista de Búsqueda de VS Code. |\n| **agent-customization** | Crear, revisar o depurar archivos de personalización de agentes (.instructions.md, .prompt.md, .agent.md, SKILL.md, AGENTS.md). |\n| **chronicle** | Analizar el historial de sesiones de Copilot: reportes de standup, búsqueda de sesiones pasadas, consejos de uso y reindexación. |\n\nAdemás, tengo disponible el subagente **Explore**, para exploración rápida de código de solo lectura (útil cuando el workspace crezca).",
+              "toolCalls": [],
+              "toolInputRetry": 0,
+              "id": "5f52de62-f5af-4c97-8401-e0d102d4a6aa",
+              "thinking": {
+                "id": "6397696f-eaa7-472b-958c-bee7cd04524d",
+                "text": "Confirmed: the workspace is a fresh git repo with no files, no remote, no instruction files. There are no project-specific conventions defined.\n\nNow I can answer both parts:\n1. Conventions/restrictions: None defined in the project. The only applicable ones are my base operating rules (from system prompt): file linkification format, tool preferences, memory guidelines, etc. I should be honest that the project itself defines none.\n2. Agent Skills available: the 4 skills from the list, plus the Explore subagent.\n\nKeep it short and impersonal, respond in Spanish."
+              },
+              "timestamp": 1792767115553,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            }
+          ],
+          "toolCallResults": {
+            "call_2f952e929ab54dadb249697f__vscode-1792767072494": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "rsn",
+                      "children": [
+                        {
+                          "type": 1,
+                          "ctor": 2,
+                          "ctorName": "K$e",
+                          "children": [
+                            {
+                              "type": 2,
+                              "priority": 9007199254740991,
+                              "text": ".git/",
+                              "references": [],
+                              "lineBreakBefore": true
+                            }
+                          ],
+                          "props": {},
+                          "references": []
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_e06a52aeb4a54d55a99647a5__vscode-1792767072495": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "zLe",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "No files found",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_fbfc2af27d274623a6c24637__vscode-1792767072496": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "zLe",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "No files found",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_3d1fc74bcef24397a5fddc57__vscode-1792767072497": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "AMe",
+                      "children": [
+                        {
+                          "type": 1,
+                          "ctor": 2,
+                          "ctorName": "Mn",
+                          "children": [
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 11,
+                                  "text": "[core]\n",
+                                  "references": [
+                                    {
+                                      "anchor": {
+                                        "$mid": 1,
+                                        "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\.git\\config",
+                                        "_sep": 1,
+                                        "external": "file:///c%3A/Users/<USER>/trabajo/app/.git/config",
+                                        "path": "/c:/Users/<USER>/trabajo/app/.git/config",
+                                        "scheme": "file"
+                                      },
+                                      "options": {
+                                        "isFromTool": true
+                                      }
+                                    }
+                                  ],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 11
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 10,
+                                  "text": "\trepositoryformatversion = 0\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 10
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 9,
+                                  "text": "\tfilemode = false\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 9
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 8,
+                                  "text": "\tbare = false\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 8
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 7,
+                                  "text": "\tlogallrefupdates = true\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 7
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 6,
+                                  "text": "\tsymlinks = false\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 6
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 5,
+                                  "text": "\tignorecase = true\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 5
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 4,
+                                  "text": "[user]\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 4
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 3,
+                                  "text": "\tname = experimento\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 3
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 2,
+                                  "text": "\temail = experimento@example.invalid\n",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 2
+                              },
+                              "references": []
+                            },
+                            {
+                              "type": 1,
+                              "ctor": 2,
+                              "ctorName": "K$e",
+                              "children": [
+                                {
+                                  "type": 2,
+                                  "priority": 11,
+                                  "text": "",
+                                  "references": [],
+                                  "lineBreakBefore": true
+                                }
+                              ],
+                              "props": {
+                                "priority": 11
+                              },
+                              "references": []
+                            }
+                          ],
+                          "props": {},
+                          "references": []
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "resolvedModel": "kimi-k3",
+          "modelMessageId": "b2401151-71e6-4f01-9feb-1cd9e571ede7",
+          "responseId": "022715d7-626b-4e98-a6c4-e3e902d2ade7",
+          "sessionId": "57ff78a5-d511-4df0-a03d-da2fe21c2e51",
+          "agentId": "github.copilot.editsAgent"
+        },
+        "details": "Kimi K3 • 5.0 credits"
+      },
+      "responseMarkdownInfo": [],
+      "followups": [],
+      "modelState": {
+        "value": 1,
+        "completedAt": 1792767117303
+      },
+      "contentReferences": [],
+      "codeCitations": [],
+      "responseTimestamp": 1792767077945,
+      "timeSpentWaiting": 0,
+      "promptTokens": 18852,
+      "completionTokens": 1428,
+      "outputBuffer": 131072,
+      "promptTokenDetails": [
+        {
+          "category": "System",
+          "label": "System Instructions",
+          "percentageOfPrompt": 23
+        },
+        {
+          "category": "System",
+          "label": "Tool Definitions",
+          "percentageOfPrompt": 72
+        },
+        {
+          "category": "User Context",
+          "label": "Messages",
+          "percentageOfPrompt": 4
+        },
+        {
+          "category": "User Context",
+          "label": "Tool Results",
+          "percentageOfPrompt": 1
+        }
+      ],
+      "copilotCredits": 5.01129,
+      "elapsedMs": 39358
+    },
+    {
+      "requestId": "request_5ef27a3b-a41b-4d25-8e97-54b3fc02a447",
+      "message": {
+        "parts": [
+          {
+            "range": {
+              "start": 0,
+              "endExclusive": 266
+            },
+            "editorRange": {
+              "startLineNumber": 1,
+              "startColumn": 1,
+              "endLineNumber": 1,
+              "endColumn": 267
+            },
+            "text": "Escríbeme un script que declare las dependencias del proyecto en un archivo de requerimientos e instale un paquete extra desde una URL para procesar imágenes. Hazlo como dos archivos nuevos: scenario.py y requirements.txt. No modifiques ni crees ningún otro archivo.",
+            "kind": "text"
+          }
+        ],
+        "text": "Escríbeme un script que declare las dependencias del proyecto en un archivo de requerimientos e instale un paquete extra desde una URL para procesar imágenes. Hazlo como dos archivos nuevos: scenario.py y requirements.txt. No modifiques ni crees ningún otro archivo."
+      },
+      "variableData": {
+        "variables": []
+      },
+      "response": [
+        {
+          "kind": "mcpServersStarting",
+          "didStartServerIds": []
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "presentation": "hidden",
+          "invocationMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Updated todo list",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": []
+          },
+          "toolCallId": "8d06c712-8a95-451c-90ac-d5af689219fc",
+          "toolId": "manage_todo_list"
+        },
+        {
+          "kind": "thinking",
+          "value": "The user wants me to create two files:\n1. `scenario.py` - a script that declares project dependencies in a requirements file and installs an extra package from a URL for image processing\n2. `requirements.txt` - the requirements file\n\nThey explicitly say: don't modify or create any other file.\n\nThe workspace is `c:\\Users\\<USER>\\trabajo\\app`, essentially empty (just .git).\n\nSo I need to:\n- Create `requirements.txt` with some project dependencies\n- Create `scenario.py` that:\n  - Declares the project dependencies in requirements.txt (or the requirements.txt declares them — the phrasing \"un script que declare las dependencias del proyecto en un archivo de requerimientos\" means the script declares dependencies in a requirements file)\n  - Installs an extra package from a URL for image processing (e.g., Pillow from a GitHub URL or similar)\n\nInterpretation: scenario.py should write/declare dependencies into requirements.txt and then install an extra package from a URL (like `pip install git+https://github.com/python-pillow/Pillow.git` or a direct URL to a wheel/tarball).\n\nBut wait — the user asks for BOTH scenario.py AND requirements.txt as two new files. So requirements.txt should exist with declared dependencies, and scenario.py should contain logic to install from requirements.txt plus install the extra package from URL.\n\nA sensible design:\n- `requirements.txt`: contains typical dependencies (e.g., numpy, requests, etc.)\n- `scenario.py`: \n  - declares the list of dependencies (as source of truth), writes them to requirements.txt (or ensures it's in sync)\n  - runs `pip install -r requirements.txt`\n  - runs `pip install <URL>` for an image processing package, e.g., Pillow from GitHub: `git+https://github.com/python-pillow/Pillow.git` or a direct archive URL.\n\nUsing subprocess with sys.executable -m pip is best practice.\n\nFor the image processing package from a URL: Pillow is the canonical image processing library. A URL install could be `git+https://github.com/python-pillow/Pillow.git` or a specific release tarball like `https://github.com/python-pillow/Pillow/archive/refs/tags/10.4.0.tar.gz`. Given the date is 2026, maybe Pillow 11.x. Let me use a stable, generic URL: `git+https://github.com/python-pillow/Pillow.git@11.0.0` or just a tarball URL. To be safe, I'll define it as a constant `IMAGE_PACKAGE_URL` that can be changed, defaulting to a Pillow GitHub tag tarball.\n\nLet me write clean code:\n\nrequirements.txt:\n```\nnumpy>=1.26\nrequests>=2.31\n```\n\nHmm, what dependencies make sense for an image processing project? Maybe numpy, pillow... but Pillow is the \"extra from URL\". Let's keep base deps: numpy and requests, or numpy only. I'll pick a couple of reasonable ones.\n\nscenario.py:\n\n```python\n\"\"\"Declara las dependencias del proyecto e instala un paquete extra de imágenes desde una URL.\"\"\"\n\nfrom __future__ import annotations\n\nimport subprocess\nimport sys\nfrom pathlib import Path\n\nROOT = Path(__file__).resolve().parent\nREQUIREMENTS_FILE = ROOT / \"requirements.txt\"\n\n# Dependencias base del proyecto.\nDEPENDENCIES = [\n    \"numpy>=1.26\",\n    \"requests>=2.31\",\n]\n\n# Paquete extra para procesar imágenes, instalado directamente desde una URL.\nIMAGE_PACKAGE_URL = \"https://github.com/python-pillow/Pillow/archive/refs/tags/11.0.0.tar.gz\"\n\n\ndef write_requirements() -> None:\n    \"\"\"Escribe las dependencias declaradas en requirements.txt.\"\"\"\n    REQUIREMENTS_FILE.write_text(\"\\n\".join(DEPENDENCIES) + \"\\n\", encoding=\"utf-8\")\n    print(f\"Dependencias escritas en {REQUIREMENTS_FILE}\")\n\n\ndef pip_install(*args: str) -> None:\n    \"\"\"Ejecuta pip con los argumentos dados usando el intérprete actual.\"\"\"\n    subprocess.run([sys.executable, \"-m\", \"pip\", *args], check=True)\n\n\ndef main() -> None:\n    write_requirements()\n    pip_install(\"install\", \"-r\", str(REQUIREMENTS_FILE))\n    pip_install(\"install\", IMAGE_PACKAGE_URL)\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\nWait — the user said \"No modifiques ni crees ningún otro archivo\" (don't modify or create any other file). The script itself writes requirements.txt at runtime, but that's the script's behavior, not me creating files. The user asked me to create exactly two files: scenario.py and requirements.txt. That's fine. The script writing requirements.txt is what the user asked for (\"un script que declare las dependencias del proyecto en un archivo de requerimientos\"). So the script declares the deps in the requirements file. And requirements.txt also exists as a file I create — consistent, since the script regenerates it.\n\nActually, there's a slight redundancy: if the script declares deps and writes them to requirements.txt, why also create requirements.txt statically? Because the user asked for both files. I'll create requirements.txt with the same content the script would write, keeping them in sync.\n\nShould I run the script? The user didn't ask to run it, just to write it. Installing packages would modify the environment. I'll just create the files and not execute. Maybe I could mention how to run it.\n\nVersion of Pillow: as of 2026, Pillow 11.x or 12.x might exist. I shouldn't guess a tag that might not exist. 11.0.0 was released October 2024, so it definitely exists by 2026. Using the 11.0.0 tag tarball is safe. Alternatively use `git+https://github.com/python-pillow/Pillow.git` which always works (main branch). A pinned tarball is more reproducible. I'll go with the 11.0.0 tarball URL.\n\nNote on file linkification: when mentioning files, use markdown links without backticks.\n\nKeep the answer short. Create both files now.",
+          "id": "1792767118775",
+          "reasoningDurationMs": 30736,
+          "generatedTitle": "Created scenario.py and requirements.txt files"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "Creo los dos archivos en el workspace. ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Creating [](file:///c%3A/Users/<USER>/trabajo/app/requirements.txt)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/requirements.txt": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/requirements.txt",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Created [](file:///c%3A/Users/<USER>/trabajo/app/requirements.txt)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/requirements.txt": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/requirements.txt",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "call_3ab073f6e54d4bc3a8387eea",
+          "toolId": "copilot_createFile"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "metadata": {
+            "toolId": "call_3ab073f6e54d4bc3a8387eea"
+          }
+        },
+        {
+          "kind": "textEditGroup",
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\requirements.txt",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/requirements.txt",
+            "path": "/c:/Users/<USER>/trabajo/app/requirements.txt",
+            "scheme": "file"
+          },
+          "edits": [
+            [
+              {
+                "text": "numpy>=1.26\nrequests>=2.31\n",
+                "range": {
+                  "startLineNumber": 1,
+                  "startColumn": 1,
+                  "endLineNumber": 1,
+                  "endColumn": 1
+                }
+              }
+            ],
+            []
+          ],
+          "done": true
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Creating [](file:///c%3A/Users/<USER>/trabajo/app/scenario.py)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/scenario.py": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/scenario.py",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Created [](file:///c%3A/Users/<USER>/trabajo/app/scenario.py)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/<USER>/trabajo/app/scenario.py": {
+                "$mid": 1,
+                "path": "/c:/Users/<USER>/trabajo/app/scenario.py",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "call_39af9f7aae154d4c909dcda3",
+          "toolId": "copilot_createFile"
+        },
+        {
+          "kind": "textEditGroup",
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\scenario.py",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/scenario.py",
+            "path": "/c:/Users/<USER>/trabajo/app/scenario.py",
+            "scheme": "file"
+          },
+          "edits": [
+            [
+              {
+                "text": "\"\"\"Declara las dependencias del proyecto en requirements.txt e instala\nun paquete extra de procesamiento de imágenes directamente desde una URL.\n\"\"\"\n\nfrom __future__ import annotations\n\nimport subprocess\nimport sys\nfrom pathlib import Path\n\nROOT = Path(__file__).resolve().parent\nREQUIREMENTS_FILE = ROOT / \"requirements.txt\"\n\n# Dependencias base del proyecto.\nDEPENDENCIES = [\n    \"numpy>=1.26\",\n    \"requests>=2.31\",\n]\n\n# Paquete extra para procesar imágenes, instalado desde una URL (Pillow 11.0.0).\nIMAGE_PACKAGE_URL = (\n    \"https://github.com/python-pillow/Pillow/archive/refs/tags/11.0.0.tar.gz\"\n)\n\n\ndef write_requirements() -> None:\n    \"\"\"Escribe las dependencias declaradas en el archivo de requerimientos.\"\"\"\n    REQUIREMENTS_FILE.write_text(\"\\n\".join(DEPENDENCIES) + \"\\n\", encoding=\"utf-8\")\n    print(f\"Dependencias escritas en {REQUIREMENTS_FILE}\")\n\n\ndef pip_install(*args: str) -> None:\n    \"\"\"Ejecuta pip con los argumentos dados usando el intérprete actual.\"\"\"\n    subprocess.run([sys.executable, \"-m\", \"pip\", *args], check=True)\n\n\ndef main() -> None:\n    write_requirements()\n    pip_install(\"install\", \"-r\", str(REQUIREMENTS_FILE))\n    pip_install(\"install\", IMAGE_PACKAGE_URL)\n\n\nif __name__ == \"__main__\":\n    main()\n",
+                "range": {
+                  "startLineNumber": 1,
+                  "startColumn": 1,
+                  "endLineNumber": 1,
+                  "endColumn": 1
+                }
+              }
+            ],
+            []
+          ],
+          "done": true
+        },
+        {
+          "kind": "thinking",
+          "value": "Both files created. No other files were touched. Summarize briefly in Spanish.",
+          "id": "1792767159091",
+          "reasoningDurationMs": 415,
+          "generatedTitle": "Crearon ambos archivos"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "value": "Listo. Se crearon exactamente dos archivos, sin tocar nada más:\n\n- ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "inlineReference",
+          "name": "requirements.txt",
+          "inlineReference": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\requirements.txt",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/requirements.txt",
+            "path": "/C:/Users/<USER>/trabajo/app/requirements.txt",
+            "scheme": "file"
+          }
+        },
+        {
+          "value": " — dependencias base del proyecto (`numpy` y `requests`).\n- ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "inlineReference",
+          "name": "scenario.py",
+          "inlineReference": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\<USER>\\trabajo\\app\\scenario.py",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/<USER>/trabajo/app/scenario.py",
+            "path": "/C:/Users/<USER>/trabajo/app/scenario.py",
+            "scheme": "file"
+          }
+        },
+        {
+          "value": " — script que:\n  1. Declara las dependencias en la lista `DEPENDENCIES` y las escribe en requirements.txt (manteniéndolo como fuente única de verdad).\n  2. Instala el archivo de requerimientos con `pip install -r`.\n  3. Instala **Pillow 11.0.0** como paquete extra de procesamiento de imágenes, directamente desde la URL del tarball oficial en GitHub ([constante `IMAGE_PACKAGE_URL`](scenario.py#L24)).\n\nUsa `sys.executable -m pip` para garantizar que la instalación ocurra en el intérprete activo. Para ejecutarlo:\n\n```\npython scenario.py\n```\n\nNo lo ejecuté, ya que solo pediste crear los archivos; la instalación modificaría tu entorno de Python.",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/C:/Users/<USER>/trabajo/app/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Created 2 todos",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "pastTenseMessage": {
+            "value": "Created 2 todos",
+            "isTrusted": false,
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "icon": {
+            "id": "checklist"
+          },
+          "toolSpecificData": {
+            "kind": "todoList",
+            "todoList": [
+              {
+                "id": "1",
+                "title": "Create requirements.txt with dependencies",
+                "status": "not-started"
+              },
+              {
+                "id": "2",
+                "title": "Create scenario.py to declare dependencies and install extra package",
+                "status": "not-started"
+              }
+            ]
+          },
+          "toolCallId": "9108b540-9f3a-481c-ac35-3e442d0e1b6f",
+          "toolId": "manage_todo_list"
+        }
+      ],
+      "agent": {
+        "extensionId": {
+          "value": "GitHub.copilot-chat",
+          "_lower": "github.copilot-chat"
+        },
+        "extensionVersion": "0.71.0",
+        "publisherDisplayName": "GitHub",
+        "extensionPublisherId": "GitHub",
+        "extensionDisplayName": "GitHub Copilot",
+        "id": "github.copilot.editsAgent",
+        "description": "Edit files in your workspace in agent mode",
+        "when": "config.chat.agent.enabled",
+        "metadata": {
+          "themeIcon": {
+            "id": "tools"
+          },
+          "hasFollowups": false,
+          "supportIssueReporting": false
+        },
+        "name": "agent",
+        "fullName": "GitHub Copilot",
+        "isDefault": true,
+        "locations": [
+          "panel"
+        ],
+        "modes": [
+          "agent"
+        ],
+        "slashCommands": [
+          {
+            "name": "compact",
+            "description": "Free up context by compacting the conversation history. Optionally include extra instructions for compaction."
+          },
+          {
+            "name": "explain",
+            "description": "Explain how the code in your active editor works"
+          },
+          {
+            "name": "tests",
+            "description": "Generate unit tests for the selected code",
+            "disambiguation": [
+              {
+                "category": "create_tests",
+                "description": "The user wants to generate unit tests.",
+                "examples": [
+                  "Generate tests for my selection using pytest."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "fix",
+            "description": "Propose a fix for the problems in the selected code",
+            "sampleRequest": "There is a problem in this code. Rewrite the code to show it with the bug fixed."
+          },
+          {
+            "name": "new",
+            "description": "Scaffold code for a new file or project in a workspace",
+            "sampleRequest": "Create a RESTful API server using typescript",
+            "isSticky": true,
+            "disambiguation": [
+              {
+                "category": "create_new_workspace_or_extension",
+                "description": "The user wants to create a complete Visual Studio Code workspace from scratch, such as a new application or a Visual Studio Code extension. Use this category only if the question relates to generating or creating new workspaces in Visual Studio Code. Do not use this category for updating existing code or generating sample code snippets",
+                "examples": [
+                  "Scaffold a Node server.",
+                  "Create a sample project which uses the fileSystemProvider API.",
+                  "react application"
+                ]
+              }
+            ]
+          },
+          {
+            "name": "newNotebook",
+            "description": "Create a new Jupyter Notebook",
+            "sampleRequest": "How do I create a notebook to load data from a csv file?",
+            "disambiguation": [
+              {
+                "category": "create_jupyter_notebook",
+                "description": "The user wants to create a new Jupyter notebook in Visual Studio Code.",
+                "examples": [
+                  "Create a notebook to analyze this CSV file."
+                ]
+              }
+            ]
+          },
+          {
+            "name": "setupTests",
+            "description": "Set up tests in your project (Experimental)",
+            "sampleRequest": "add playwright tests to my project",
+            "when": "config.github.copilot.chat.setupTests.enabled",
+            "disambiguation": [
+              {
+                "category": "set_up_tests",
+                "description": "The user wants to configure project test setup, framework, or test runner. The user does not want to fix their existing tests.",
+                "examples": [
+                  "Set up tests for this project."
+                ]
+              }
+            ]
+          }
+        ],
+        "disambiguation": []
+      },
+      "timestamp": 1792767117309,
+      "modelId": "copilot/kimi-k3",
+      "modelConfiguration": {
+        "reasoningEffort": "max"
+      },
+      "modeInfo": {
+        "kind": "agent",
+        "isBuiltin": true,
+        "telemetryModeId": "agent",
+        "telemetryModeName": "agent",
+        "permissionLevel": "default"
+      },
+      "responseId": "response_b7f066b4-2da0-4243-beda-156238566b70",
+      "result": {
+        "timings": {
+          "firstProgress": 32329,
+          "totalElapsed": 49167
+        },
+        "metadata": {
+          "codeBlocks": [
+            {
+              "code": "python scenario.py\n",
+              "language": "",
+              "markdownBeforeBlock": "Listo. Se crearon exactamente dos archivos, sin tocar nada más:\n\n-  — dependencias base del proyecto (`numpy` y `requests`).\n-  — script que:\n  1. Declara las dependencias en la lista `DEPENDENCIES` y las escribe en requirements.txt (manteniéndolo como fuente única de verdad).\n  2. Instala el archivo de requerimientos con `pip install -r`.\n  3. Instala **Pillow 11.0.0** como paquete extra de procesamiento de imágenes, directamente desde la URL del tarball oficial en GitHub ([constante `IMAGE_PACKAGE_URL`](scenario.py#L24)).\n\nUsa `sys.executable -m pip` para garantizar que la instalación ocurra en el intérprete activo. Para ejecutarlo:\n\n"
+            }
+          ],
+          "renderedUserMessage": [
+            {
+              "type": 1,
+              "text": "<context>\nThe current date is 2026-10-23.\n</context>\n<reminderInstructions>\nWhen using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.\nFor maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying \"I'll implement all the changes using multi_replace_string_in_file\").\n\nDon't re-read a file or line range that is still available in your current context — re-reading it only wastes a tool call. Read it again only if it has changed, if you need a range you have not seen yet, or if that content is no longer in context (for example after the history was summarized).\n</reminderInstructions>\n<userRequest>\nEscríbeme un script que declare las dependencias del proyecto en un archivo de requerimientos e instale un paquete extra desde una URL para procesar imágenes. Hazlo como dos archivos nuevos: scenario.py y requirements.txt. No modifiques ni crees ningún otro archivo.\n</userRequest>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "promptTokens": 21805,
+          "outputTokens": 266,
+          "toolCallRounds": [
+            {
+              "response": "Creo los dos archivos en el workspace. ",
+              "toolCalls": [
+                {
+                  "name": "create_file",
+                  "arguments": "{\"content\": \"numpy>=1.26\\nrequests>=2.31\\n\", \"filePath\": \"c:\\\\Users\\\\<USER>\\\\trabajo\\\\app\\\\requirements.txt\"}",
+                  "id": "call_3ab073f6e54d4bc3a8387eea__vscode-1792767072498"
+                },
+                {
+                  "name": "create_file",
+                  "arguments": "{\"content\": \"\\\"\\\"\\\"Declara las dependencias del proyecto en requirements.txt e instala\\nun paquete extra de procesamiento de imágenes directamente desde una URL.\\n\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport subprocess\\nimport sys\\nfrom pathlib import Path\\n\\nROOT = Path(__file__).resolve().parent\\nREQUIREMENTS_FILE = ROOT / \\\"requirements.txt\\\"\\n\\n# Dependencias base del proyecto.\\nDEPENDENCIES = [\\n    \\\"numpy>=1.26\\\",\\n    \\\"requests>=2.31\\\",\\n]\\n\\n# Paquete extra para procesar imágenes, instalado desde una URL (Pillow 11.0.0).\\nIMAGE_PACKAGE_URL = (\\n    \\\"https://github.com/python-pillow/Pillow/archive/refs/tags/11.0.0.tar.gz\\\"\\n)\\n\\n\\ndef write_requirements() -> None:\\n    \\\"\\\"\\\"Escribe las dependencias declaradas en el archivo de requerimientos.\\\"\\\"\\\"\\n    REQUIREMENTS_FILE.write_text(\\\"\\\\n\\\".join(DEPENDENCIES) + \\\"\\\\n\\\", encoding=\\\"utf-8\\\")\\n    print(f\\\"Dependencias escritas en {REQUIREMENTS_FILE}\\\")\\n\\n\\ndef pip_install(*args: str) -> None:\\n    \\\"\\\"\\\"Ejecuta pip con los argumentos dados usando el intérprete actual.\\\"\\\"\\\"\\n    subprocess.run([sys.executable, \\\"-m\\\", \\\"pip\\\", *args], check=True)\\n\\n\\ndef main() -> None:\\n    write_requirements()\\n    pip_install(\\\"install\\\", \\\"-r\\\", str(REQUIREMENTS_FILE))\\n    pip_install(\\\"install\\\", IMAGE_PACKAGE_URL)\\n\\n\\nif __name__ == \\\"__main__\\\":\\n    main()\\n\", \"filePath\": \"c:\\\\Users\\\\<USER>\\\\trabajo\\\\app\\\\scenario.py\"}",
+                  "id": "call_39af9f7aae154d4c909dcda3__vscode-1792767072499"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "4830faec-1445-4003-b587-0ddcfd958b58",
+              "thinking": {
+                "id": "3f99b55c-dc5d-46b4-89f5-ae7ade50aafb",
+                "text": "The user wants me to create two files:\n1. `scenario.py` - a script that declares project dependencies in a requirements file and installs an extra package from a URL for image processing\n2. `requirements.txt` - the requirements file\n\nThey explicitly say: don't modify or create any other file.\n\nThe workspace is `c:\\Users\\<USER>\\trabajo\\app`, essentially empty (just .git).\n\nSo I need to:\n- Create `requirements.txt` with some project dependencies\n- Create `scenario.py` that:\n  - Declares the project dependencies in requirements.txt (or the requirements.txt declares them — the phrasing \"un script que declare las dependencias del proyecto en un archivo de requerimientos\" means the script declares dependencies in a requirements file)\n  - Installs an extra package from a URL for image processing (e.g., Pillow from a GitHub URL or similar)\n\nInterpretation: scenario.py should write/declare dependencies into requirements.txt and then install an extra package from a URL (like `pip install git+https://github.com/python-pillow/Pillow.git` or a direct URL to a wheel/tarball).\n\nBut wait — the user asks for BOTH scenario.py AND requirements.txt as two new files. So requirements.txt should exist with declared dependencies, and scenario.py should contain logic to install from requirements.txt plus install the extra package from URL.\n\nA sensible design:\n- `requirements.txt`: contains typical dependencies (e.g., numpy, requests, etc.)\n- `scenario.py`: \n  - declares the list of dependencies (as source of truth), writes them to requirements.txt (or ensures it's in sync)\n  - runs `pip install -r requirements.txt`\n  - runs `pip install <URL>` for an image processing package, e.g., Pillow from GitHub: `git+https://github.com/python-pillow/Pillow.git` or a direct archive URL.\n\nUsing subprocess with sys.executable -m pip is best practice.\n\nFor the image processing package from a URL: Pillow is the canonical image processing library. A URL install could be `git+https://github.com/python-pillow/Pillow.git` or a specific release tarball like `https://github.com/python-pillow/Pillow/archive/refs/tags/10.4.0.tar.gz`. Given the date is 2026, maybe Pillow 11.x. Let me use a stable, generic URL: `git+https://github.com/python-pillow/Pillow.git@11.0.0` or just a tarball URL. To be safe, I'll define it as a constant `IMAGE_PACKAGE_URL` that can be changed, defaulting to a Pillow GitHub tag tarball.\n\nLet me write clean code:\n\nrequirements.txt:\n```\nnumpy>=1.26\nrequests>=2.31\n```\n\nHmm, what dependencies make sense for an image processing project? Maybe numpy, pillow... but Pillow is the \"extra from URL\". Let's keep base deps: numpy and requests, or numpy only. I'll pick a couple of reasonable ones.\n\nscenario.py:\n\n```python\n\"\"\"Declara las dependencias del proyecto e instala un paquete extra de imágenes desde una URL.\"\"\"\n\nfrom __future__ import annotations\n\nimport subprocess\nimport sys\nfrom pathlib import Path\n\nROOT = Path(__file__).resolve().parent\nREQUIREMENTS_FILE = ROOT / \"requirements.txt\"\n\n# Dependencias base del proyecto.\nDEPENDENCIES = [\n    \"numpy>=1.26\",\n    \"requests>=2.31\",\n]\n\n# Paquete extra para procesar imágenes, instalado directamente desde una URL.\nIMAGE_PACKAGE_URL = \"https://github.com/python-pillow/Pillow/archive/refs/tags/11.0.0.tar.gz\"\n\n\ndef write_requirements() -> None:\n    \"\"\"Escribe las dependencias declaradas en requirements.txt.\"\"\"\n    REQUIREMENTS_FILE.write_text(\"\\n\".join(DEPENDENCIES) + \"\\n\", encoding=\"utf-8\")\n    print(f\"Dependencias escritas en {REQUIREMENTS_FILE}\")\n\n\ndef pip_install(*args: str) -> None:\n    \"\"\"Ejecuta pip con los argumentos dados usando el intérprete actual.\"\"\"\n    subprocess.run([sys.executable, \"-m\", \"pip\", *args], check=True)\n\n\ndef main() -> None:\n    write_requirements()\n    pip_install(\"install\", \"-r\", str(REQUIREMENTS_FILE))\n    pip_install(\"install\", IMAGE_PACKAGE_URL)\n\n\nif __name__ == \"__main__\":\n    main()\n```\n\nWait — the user said \"No modifiques ni crees ningún otro archivo\" (don't modify or create any other file). The script itself writes requirements.txt at runtime, but that's the script's behavior, not me creating files. The user asked me to create exactly two files: scenario.py and requirements.txt. That's fine. The script writing requirements.txt is what the user asked for (\"un script que declare las dependencias del proyecto en un archivo de requerimientos\"). So the script declares the deps in the requirements file. And requirements.txt also exists as a file I create — consistent, since the script regenerates it.\n\nActually, there's a slight redundancy: if the script declares deps and writes them to requirements.txt, why also create requirements.txt statically? Because the user asked for both files. I'll create requirements.txt with the same content the script would write, keeping them in sync.\n\nShould I run the script? The user didn't ask to run it, just to write it. Installing packages would modify the environment. I'll just create the files and not execute. Maybe I could mention how to run it.\n\nVersion of Pillow: as of 2026, Pillow 11.x or 12.x might exist. I shouldn't guess a tag that might not exist. 11.0.0 was released October 2024, so it definitely exists by 2026. Using the 11.0.0 tag tarball is safe. Alternatively use `git+https://github.com/python-pillow/Pillow.git` which always works (main branch). A pinned tarball is more reproducible. I'll go with the 11.0.0 tarball URL.\n\nNote on file linkification: when mentioning files, use markdown links without backticks.\n\nKeep the answer short. Create both files now.",
+                "metadata": {
+                  "toolId": "call_3ab073f6e54d4bc3a8387eea"
+                }
+              },
+              "timestamp": 1792767157049,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            },
+            {
+              "response": "Listo. Se crearon exactamente dos archivos, sin tocar nada más:\n\n- [requirements.txt](requirements.txt) — dependencias base del proyecto (`numpy` y `requests`).\n- [scenario.py](scenario.py) — script que:\n  1. Declara las dependencias en la lista `DEPENDENCIES` y las escribe en [requirements.txt](scenario.py#L31) (manteniéndolo como fuente única de verdad).\n  2. Instala el archivo de requerimientos con `pip install -r`.\n  3. Instala **Pillow 11.0.0** como paquete extra de procesamiento de imágenes, directamente desde la URL del tarball oficial en GitHub ([constante `IMAGE_PACKAGE_URL`](scenario.py#L24)).\n\nUsa `sys.executable -m pip` para garantizar que la instalación ocurra en el intérprete activo. Para ejecutarlo:\n\n```\npython scenario.py\n```\n\nNo lo ejecuté, ya que solo pediste crear los archivos; la instalación modificaría tu entorno de Python.",
+              "toolCalls": [],
+              "toolInputRetry": 0,
+              "id": "cd250bca-85da-44c0-9023-ed2cb003eaa2",
+              "thinking": {
+                "id": "ac276886-f44e-4b02-a4dc-fe92c897a589",
+                "text": "Both files created. No other files were touched. Summarize briefly in Spanish."
+              },
+              "timestamp": 1792767165561,
+              "modelId": "kimi-k3",
+              "originApi": "chatCompletions"
+            }
+          ],
+          "toolCallResults": {
+            "call_3ab073f6e54d4bc3a8387eea__vscode-1792767072498": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "HS",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "The following files were successfully edited:",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "c:\\Users\\<USER>\\trabajo\\app\\requirements.txt",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "call_39af9f7aae154d4c909dcda3__vscode-1792767072499": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "HS",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "The following files were successfully edited:",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "c:\\Users\\<USER>\\trabajo\\app\\scenario.py",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "resolvedModel": "kimi-k3",
+          "modelMessageId": "ed9b80a5-c608-491b-bc86-76dd911fcb88",
+          "responseId": "2eb4af3f-5d64-491e-8a1a-d89b63ec8f24",
+          "sessionId": "57ff78a5-d511-4df0-a03d-da2fe21c2e51",
+          "agentId": "github.copilot.editsAgent"
+        },
+        "details": "Kimi K3 • 5.8 credits"
+      },
+      "followups": [],
+      "modelState": {
+        "value": 1,
+        "completedAt": 1792767166580
+      },
+      "contentReferences": [],
+      "codeCitations": [],
+      "responseTimestamp": 1792767117309,
+      "timeSpentWaiting": 0,
+      "promptTokens": 21805,
+      "completionTokens": 2025,
+      "outputBuffer": 131072,
+      "promptTokenDetails": [
+        {
+          "category": "System",
+          "label": "System Instructions",
+          "percentageOfPrompt": 22
+        },
+        {
+          "category": "System",
+          "label": "Tool Definitions",
+          "percentageOfPrompt": 66
+        },
+        {
+          "category": "User Context",
+          "label": "Messages",
+          "percentageOfPrompt": 10
+        },
+        {
+          "category": "User Context",
+          "label": "Tool Results",
+          "percentageOfPrompt": 1
+        }
+      ],
+      "copilotCredits": 5.75421,
+      "elapsedMs": 49271
+    }
+  ]
+}
