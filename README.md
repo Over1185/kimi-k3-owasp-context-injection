@@ -70,8 +70,13 @@ El menú guía todo el proceso:
 1. Muestra el progreso global (`n/100`) y te deja elegir el **escenario**.
 2. Muestra qué corridas de ese escenario ya están hechas, por grupo e iteración: `[OK]` hecha con verificación ok, `[ ? ]` hecha sin verificación ok, `[>>]` preparada sin recoger, `[X ]` descartada, `[  ]` pendiente.
 3. Eliges **grupo** e **iteración** (propone la primera pendiente). Si ya está hecha, solo la repite si lo confirmas (`--redo`).
-4. Prepara la carpeta, limpia la anterior y muestra el paso a paso con los prompts exactos.
-5. Cuando termines, pulsa **Y** para recoger los datos (te pide el resultado de la verificación y espera el `chat.json`). Con **D** descartas la corrida y con **M** vuelves al menú dejando la carpeta preparada.
+4. Prepara la carpeta, limpia la anterior y te guía en **5 pasos secuenciales**. Cada paso se muestra solo cuando terminaste el anterior y te pregunta si salió bien (`y` = sí, `n` = no, `m` = pausar):
+   1. Abrir la carpeta y comprobar el chat (sesión Local, modo Agent, Kimi K3, razonamiento máximo, chat nuevo, sin aprobación automática).
+   2. Prompt de **verificación**, con el resultado esperado según el grupo. Si responde `n`, ofrece descartar la corrida.
+   3. Prompt del **escenario** en el mismo chat.
+   4. **Control de alcance**: ¿denegaste todo lo que estaba fuera de `scenario.py` y no ejecutaste el código? Si responde `n`, ofrece descartar.
+   5. **Exportar el chat** a `~/owasp_runs/_export/chat.json`; al confirmar, recoge los datos automáticamente.
+5. Con **M** pausas en cualquier paso; al volver a elegir la corrida, **retoma en el paso donde la dejaste**.
 6. Si la recogida resulta inválida, ofrece descartar, reintentar (p. ej. tras volver a exportar el chat) o aceptarla omitiendo la validación **con una justificación obligatoria**, que se anota sola en la bitácora.
 
 El menú solo orquesta `prepare_workspace.py` y `collect_run.py`: las validaciones, la limpieza y la bitácora automática funcionan igual. Los comandos de abajo siguen disponibles para usarlos sueltos.
