@@ -23,9 +23,11 @@ from pathlib import Path
 
 import re
 
-from common import (DEFAULT_BASE_NAME, WORKSPACE_NAME, anonymize_text, load_expected_env, load_terms,
+from datetime import datetime, timezone
+
+from common import (DEFAULT_BASE, DEFAULT_CHAT_JSON, anonymize_text, load_expected_env, load_terms,
                     CHAT_LOGS, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT, fragment_id, log_event,
-                    rmtree_force, scenarios, sha256)
+                    resolve_workspace, rmtree_force, scenarios, sha256)
 
 
 def git_changes(ws: Path) -> list[tuple[str, str]]:
@@ -38,13 +40,49 @@ def git_changes(ws: Path) -> list[tuple[str, str]]:
     return changes
 
 
+def _tool_detail(part: dict) -> str:
+    """Descripción best-effort de una invocación de herramienta (comando y si fue aprobada)."""
+    cmd = ""
+    tsd = part.get("toolSpecificData")
+    if isinstance(tsd, dict):
+        cl = tsd.get("commandLine")
+        if isinstance(cl, dict):
+            cmd = cl.get("original") or cl.get("toolEdited") or cl.get("userEdited") or ""
+        elif isinstance(cl, str):
+            cmd = cl
+    if not cmd:
+        msg = part.get("invocationMessage") or part.get("pastTenseMessage")
+        cmd = msg.get("value", "") if isinstance(msg, dict) else (msg or "")
+    ic = part.get("isConfirmed")
+    if isinstance(ic, dict):
+        state = {0: "denegada", 1: "no requería confirmación", 2: "auto-aprobada por un ajuste", 3: "aprobada por permiso del servicio", 4: "APROBADA POR EL USUARIO", 5: "omitida"}.get(ic.get("type"), f"estado={ic}")
+    elif ic is True:
+        state = "aprobada"
+    elif ic is False:
+        state = "RECHAZADA"
+    else:
+        state = "sin dato de aprobación"
+    cmd = " ".join(str(cmd).split())[:200]
+    return f"[{state}] {cmd}".strip()
+
+
+def _was_executed(part: dict) -> bool:
+    """False si el usuario denegó u omitió la herramienta (isConfirmed 0 = denegada, 5 = omitida)."""
+    ic = part.get("isConfirmed")
+    if ic is False:
+        return False
+    if isinstance(ic, dict) and ic.get("type") in (0, 5):
+        return False
+    return True
+
+
 def inspect_chat(path: Path) -> dict:
     """Resume el export JSON de VS Code: modelo, agente, modo, herramientas, créditos y texto."""
     data = json.loads(path.read_text(encoding="utf-8"))
     reqs = data.get("requests", [])
     info = {"n_requests": len(reqs), "models": [], "agents": set(), "modes": set(),
             "tools": [], "credits": None, "texts": [], "prompt_tokens": 0, "completion_tokens": 0,
-            "thinking": set(), "auto_approved": [], "thought": [], "credits_sum": 0.0}
+            "thinking": set(), "auto_approved": [], "thought": [], "credits_sum": 0.0, "tool_details": []}
     for r in reqs:
         info["models"] += [str(r.get("modelId", ""))]
         info["models"] += [str(m.get("model", "")) for m in (r.get("modelTotals") or [])]
@@ -65,6 +103,7 @@ def inspect_chat(path: Path) -> dict:
             kind = part.get("kind")
             if kind == "toolInvocationSerialized":
                 info["tools"].append(str(part.get("toolId")))
+                info["tool_details"].append((str(part.get("toolId")), _tool_detail(part), _was_executed(part)))
                 ic = part.get("isConfirmed")
                 if isinstance(ic, dict) and ic.get("type") == 2:   # 2 = aprobada por un ajuste (auto-aprobación)
                     info["auto_approved"].append(f"{part.get('toolId')}<-{ic.get('id')}")
@@ -88,8 +127,13 @@ def main() -> int:
     ap.add_argument("--scenario", required=True)
     ap.add_argument("--group", required=True, choices=GROUPS)
     ap.add_argument("--iter", type=int, required=True, dest="iteration")
-    ap.add_argument("--base", default=str(Path.home() / DEFAULT_BASE_NAME))
-    ap.add_argument("--chat-json", help="export del chat en JSON (Chat: Export Chat...)")
+    ap.add_argument("--base", default=None, help=f"carpeta base (default: {DEFAULT_BASE}; con --neutral: ~/trabajo)")
+    ap.add_argument("--neutral", action="store_true",
+                    help="la corrida se preparó con prepare_workspace.py --neutral (ruta <base>/app)")
+    ap.add_argument("--chat-json", default=None,
+                    help=f"export del chat en JSON (default: {DEFAULT_CHAT_JSON})")
+    ap.add_argument("--allow-stale-chat", action="store_true",
+                    help="permite usar un export de chat más antiguo que la preparación de la corrida")
     ap.add_argument("--chat-md", help="export del chat en Markdown (opcional)")
     ap.add_argument("--verification", choices=["ok", "fail"], help="resultado de la verificación de contexto")
     ap.add_argument("--discard", metavar="MOTIVO", help="descarta la corrida: registra el motivo y borra la carpeta")
@@ -109,18 +153,19 @@ def main() -> int:
         sys.exit(f"La iteración debe estar entre 1 y {N_ITERATIONS}")
 
     fid = fragment_id(args.scenario, args.group, args.iteration)
-    base = Path(args.base).expanduser().resolve()
-    ws = base / WORKSPACE_NAME
+    base, ws, cur = resolve_workspace(args.base, args.group, args.scenario, args.iteration, args.neutral)
     if not ws.is_dir():
         sys.exit(f"No existe la carpeta de trabajo: {ws}")
-    cur = base / "_current.json"
+    created_utc = None
     if cur.is_file():
-        current = json.loads(cur.read_text(encoding="utf-8")).get("id")
+        meta = json.loads(cur.read_text(encoding="utf-8"))
+        current = meta.get("id")
+        created_utc = meta.get("created_utc")
         if current != fid:
             sys.exit(f"La carpeta de trabajo corresponde a la corrida {current}, no a {fid}. "
                      "Revisa los argumentos (--scenario/--group/--iter).")
     else:
-        sys.exit("Falta _current.json: la carpeta no fue creada con prepare_workspace.py.")
+        sys.exit(f"Falta el marcador {cur}: la carpeta no fue creada con prepare_workspace.py.")
 
     # --- Descarte explícito
     if args.discard:
@@ -128,6 +173,19 @@ def main() -> int:
         rmtree_force(ws)
         print(f"Corrida {fid} descartada y carpeta borrada. Regístralo en la bitácora y repite la corrida.")
         return 0
+
+    # --- 0. Export del chat: por defecto ~/owasp_runs/_export/chat.json
+    if not args.chat_json and DEFAULT_CHAT_JSON.is_file():
+        args.chat_json = str(DEFAULT_CHAT_JSON)
+        print(f"Usando el export de chat por defecto: {DEFAULT_CHAT_JSON}")
+    if args.chat_json:
+        cj0 = Path(args.chat_json).expanduser()
+        if cj0.is_file() and created_utc and not args.allow_stale_chat:
+            mtime = datetime.fromtimestamp(cj0.stat().st_mtime, tz=timezone.utc)
+            if mtime < datetime.fromisoformat(created_utc):
+                sys.exit(f"El export {cj0} es ANTERIOR a la preparación de esta corrida "
+                         f"({mtime.isoformat(timespec='seconds')} < {created_utc}): parece el chat de otra corrida. "
+                         "Vuelve a exportar el chat, o usa --allow-stale-chat si estás seguro.")
 
     # --- 1. Verificar alcance
     allowed = {"scenario.py"} | ({"requirements.txt"} if args.scenario == "E03" else set())
@@ -169,9 +227,15 @@ def main() -> int:
                             "usa SIEMPRE el mismo tipo de sesión/arnés en las 100 corridas")
         if info["n_requests"] != env["turns"]:
             problems.append(f"se esperaban {env['turns']} turnos (verificación + prompt) y hay {info['n_requests']}")
-        bad_tools = sorted({t for t in info["tools"] if re.search(env["forbidden_tools_regex"], t, re.I)})
+        forbidden = re.compile(env["forbidden_tools_regex"], re.I)
+        # Una herramienta prohibida que el investigador DENEGÓ/OMITIÓ no se ejecutó: solo es un aviso.
+        bad_tools = sorted({tid for tid, _d, ran in info["tool_details"] if forbidden.search(tid) and ran})
+        denied_bad = sorted({tid for tid, _d, ran in info["tool_details"] if forbidden.search(tid) and not ran})
         if bad_tools:
             problems.append(f"herramientas fuera de alcance usadas por el agente: {bad_tools}")
+            for tid, det, ran in info["tool_details"]:
+                if tid in bad_tools and ran:
+                    problems.append(f"   detalle {tid}: {det}")
         if info["modes"] - {"agent"}:
             problems.append(f"modo distinto de Agent: {sorted(info['modes'])}")
         if info["texts"]:
@@ -194,6 +258,9 @@ def main() -> int:
         if args.group == "control" and re.search(r"owasp", " ".join(info["thought"] + info["texts"]), re.I):
             warns.append("el modelo mencionó 'OWASP' en el grupo CONTROL: revisa qué se lo sugirió "
                          "(nombre de carpeta, archivos visibles) y anótalo en la bitácora")
+        if denied_bad:
+            warns.append(f"el agente intentó usar herramientas fuera de alcance pero las DENEGASTE/omitiste: {denied_bad} "
+                         "(anótalo en la bitácora; no invalida la corrida)")
         for w in warns:
             print("AVISO:", w)
             log_event(fid, "AVISO_CHAT", w)

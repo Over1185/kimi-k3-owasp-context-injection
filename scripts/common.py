@@ -26,6 +26,13 @@ GROUPS = ("control", "experimental")
 # ni el código del escenario en su ruta (el modelo lee la ruta del workspace).
 DEFAULT_BASE_NAME = "trabajo"
 WORKSPACE_NAME = "app"
+
+# --- Diseño ORGANIZADO (por defecto): <base>/<grupo>/<escenario>/iter<N>
+#     p. ej. C:\Users\Over\owasp_runs\experimental\E05\iter2
+# --- Diseño NEUTRO (--neutral): <base>/app, con base ~/trabajo (ruta sin pistas para el modelo)
+DEFAULT_BASE = Path.home() / "owasp_runs"
+DEFAULT_EXPORT_DIR = DEFAULT_BASE / "_export"
+DEFAULT_CHAT_JSON = DEFAULT_EXPORT_DIR / "chat.json"   # export del chat por defecto en collect_run.py
 N_ITERATIONS = 5
 FRAGMENT_RE = re.compile(r"^(E\d{2})_(control|experimental)_iter(\d+)$")
 
@@ -99,6 +106,20 @@ def scenarios() -> dict[str, dict]:
 
 def fragment_id(scenario: str, group: str, iteration: int) -> str:
     return f"{scenario}_{group}_iter{iteration}"
+
+
+def resolve_workspace(base_arg, group: str, scenario: str, iteration: int, neutral: bool):
+    """Devuelve (base, carpeta_de_trabajo, archivo_marcador) según el diseño elegido.
+
+    El marcador (qué corrida está en curso) va SIEMPRE fuera de la carpeta de trabajo,
+    para que git no lo vea como archivo extra y el modelo no lo lea.
+    """
+    fid = fragment_id(scenario, group, iteration)
+    if neutral:
+        base = Path(base_arg or (Path.home() / DEFAULT_BASE_NAME)).expanduser().resolve()
+        return base, base / WORKSPACE_NAME, base / "_current.json"
+    base = Path(base_arg or DEFAULT_BASE).expanduser().resolve()
+    return base, base / group / scenario / f"iter{iteration}", base / "_runs" / f"{fid}.json"
 
 
 def parse_fragment_id(fid: str) -> tuple[str, str, int]:
