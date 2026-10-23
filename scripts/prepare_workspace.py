@@ -8,9 +8,11 @@ La carpeta se crea FUERA del repositorio, con git inicializado y un commit base.
 En ambos grupos se copia .vscode/settings.json (mismo contenido) para que la única
 diferencia entre grupos sea el contexto.
 
-Carpeta creada (por defecto): ~/owasp_runs/<grupo>/<escenario>/iter<N>
-    p. ej. C:\\Users\\Over\\owasp_runs\\experimental\\E05\\iter2
-Con --neutral se usa la ruta neutra ~/trabajo/app (sin pistas en la ruta).
+La carpeta es SIEMPRE ~/trabajo/app (ruta neutra: el modelo la lee, así que no lleva "owasp",
+grupo ni escenario). Cada preparación borra la carpeta de la corrida anterior.
+
+Antes de crear nada, revisa data/run_log.csv: si esa corrida (escenario + grupo + iteración) ya
+fue recogida con éxito, se niega a prepararla otra vez (usa --redo para repetirla a propósito).
 
 Uso:
     python scripts/prepare_workspace.py --scenario E05 --group experimental --iter 2
@@ -27,9 +29,11 @@ from pathlib import Path
 
 import json
 
-from common import (CONTEXT_FILES, DEFAULT_BASE, GROUPS, N_ITERATIONS, ROOT,
+from datetime import datetime
+
+from common import (CONTEXT_FILES, DEFAULT_BASE, DEFAULT_EXPORT_DIR, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT,
                     fragment_id, load_protocol, log_event, resolve_workspace, rmtree_force,
-                    scenarios, sha256, utc_now)
+                    run_status, scenarios, sha256, utc_now)
 
 # origen (dentro de context_files/)  ->  destino (dentro de la carpeta desechable)
 CONTEXT_MAP = {
@@ -64,12 +68,15 @@ def main() -> int:
     ap.add_argument("--group", required=True, choices=GROUPS)
     ap.add_argument("--iter", type=int, required=True, dest="iteration", help="1 ... 5")
     ap.add_argument("--base", default=None,
-                    help=f"carpeta base, FUERA del repositorio (default: {DEFAULT_BASE}; con --neutral: ~/trabajo)")
-    ap.add_argument("--neutral", action="store_true",
-                    help="usa la ruta NEUTRA <base>/app (sin 'owasp', grupo ni escenario en la ruta que ve el modelo)")
+                    help=f"carpeta base, FUERA del repositorio y con nombre neutro (default: {DEFAULT_BASE})")
+    ap.add_argument("--redo", action="store_true",
+                    help="permite preparar una corrida que ya fue recogida (repetición deliberada; "
+                         "collect_run.py sobrescribirá el fragmento)")
     ap.add_argument("--profile", default="Experimento", help="perfil de VS Code a usar con --open")
     ap.add_argument("--open", action="store_true", help="abre la carpeta en VS Code con ese perfil")
-    ap.add_argument("--force", action="store_true", help="si la carpeta existe, la borra y la recrea")
+    # Opciones antiguas, ya sin efecto (se aceptan para no romper comandos previos)
+    ap.add_argument("--force", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("--neutral", action="store_true", help=argparse.SUPPRESS)
     ap.add_argument("--no-env", action="store_true", help="no registrar el entorno en environment_versions.csv")
     args = ap.parse_args()
 
@@ -79,25 +86,53 @@ def main() -> int:
     if not 1 <= args.iteration <= N_ITERATIONS:
         sys.exit(f"La iteración debe estar entre 1 y {N_ITERATIONS}")
 
-    base, ws, marker = resolve_workspace(args.base, args.group, args.scenario, args.iteration, args.neutral)
+    base, ws, marker = resolve_workspace(args.base)
     if base == ROOT or ROOT in base.parents:
         sys.exit("La carpeta base NO puede estar dentro del repositorio de investigación.")
 
     fid = fragment_id(args.scenario, args.group, args.iteration)
-    if not args.neutral:
-        print("AVISO: la ruta del workspace contiene el grupo/escenario (y 'owasp_runs'); el modelo puede leerla.\n"
-              "       Si quieres una ruta sin pistas, usa --neutral.")
+
+    # --- 1. Evitar solapamiento: ¿esta corrida ya está hecha? (data/run_log.csv + fragmento guardado)
+    status = run_status(fid)
+    frag = FRAGMENTS / args.group / f"{fid}.py"
+    if (status == "recogido" or frag.exists()) and not args.redo:
+        sys.exit(f"La corrida {fid} YA está hecha (run_log: {status}; fragmento: "
+                 f"{'existe' if frag.exists() else 'no existe'}). No se prepara para evitar solapamientos.\n"
+                 f"Si de verdad quieres repetirla, usa --redo (y anótalo en la bitácora).")
+    if args.redo and (status == "recogido" or frag.exists()):
+        print(f"AVISO: repitiendo la corrida {fid} (--redo); al recogerla se sobrescribirá el fragmento.")
+        log_event(fid, "REPETICION_AUTORIZADA", "preparada con --redo")
+    elif status == "preparado":
+        print(f"AVISO: {fid} fue preparada antes y nunca se recogió ni se descartó; se prepara de nuevo.")
+
+    # --- 2. Limpiar la corrida anterior (carpeta desechable + export de chat viejo)
     if ws.exists():
-        if not args.force:
-            sys.exit(f"{ws} ya existe (¿corrida anterior sin recoger?). Ejecuta collect_run.py o "
-                     f"usa --force para recrearla.")
+        prev = "desconocida"
+        if marker.is_file():
+            try:
+                prev = json.loads(marker.read_text(encoding="utf-8")).get("id", prev)
+            except ValueError:
+                pass
+        if prev != "desconocida" and run_status(prev) == "preparado":
+            msg = f"carpeta de {prev} borrada sin haberse recogido ni descartado"
+            print(f"AVISO: {msg}. Quedó registrado en data/run_log.csv; anótalo en la bitácora.")
+            log_event(prev, "ABANDONADA_AL_PREPARAR", f"{msg} al preparar {fid}")
         rmtree_force(ws)
+        print(f"Carpeta anterior borrada: {ws} (corrida {prev})")
+    old_chat = DEFAULT_EXPORT_DIR / "chat.json"
+    if old_chat.is_file():
+        arch = DEFAULT_EXPORT_DIR / "anteriores"
+        arch.mkdir(parents=True, exist_ok=True)
+        stamp = datetime.fromtimestamp(old_chat.stat().st_mtime).strftime("%Y%m%d_%H%M%S")
+        shutil.move(str(old_chat), str(arch / f"chat_{stamp}.json"))
+        print(f"Export de chat anterior archivado en {arch} (así no se confunde con el de esta corrida).")
+
     ws.mkdir(parents=True)
     # Qué corrida está en curso (fuera del workspace, para que el modelo no lo vea)
     marker.parent.mkdir(parents=True, exist_ok=True)
     marker.write_text(json.dumps(
         {"id": fid, "scenario": args.scenario, "group": args.group, "iter": args.iteration,
-         "created_utc": utc_now(), "layout": "neutral" if args.neutral else "organized"}), encoding="utf-8")
+         "created_utc": utc_now(), "redo": bool(args.redo)}), encoding="utf-8")
 
     # Archivos de contexto solo en el grupo experimental
     hashes = []
@@ -140,14 +175,14 @@ def main() -> int:
     print("     Experimental: debe listar las directrices Y la skill 'owasp-mitigacion'.")
     print("     Control: debe indicar que NO hay convenciones ni skills. Si no se cumple -> descarta:")
     print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
-          f"--iter {args.iteration}{' --neutral' if args.neutral else ''} --discard \"verificacion fallida\"")
+          f"--iter {args.iteration} --discard \"verificacion fallida\"")
     print("  3. En el MISMO chat, envía el prompt del escenario:\n")
     print(f"     {full_prompt}\n")
     print("  4. Rechaza cualquier acción fuera de scenario.py (y requirements.txt en E03).")
     print("  5. Exporta el chat (comando 'Chat: Export Chat...') y luego ejecuta:")
     print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
-          f"--iter {args.iteration}{' --neutral' if args.neutral else ''} --verification ok\n")
-    print("     (exporta el chat a ~/owasp_runs/_export/chat.json; si lo guardas en otro sitio añade --chat-json RUTA)\n")
+          f"--iter {args.iteration} --verification ok\n")
+    print(f"     (guarda el export como {DEFAULT_EXPORT_DIR / 'chat.json'}; si lo guardas en otro sitio añade --chat-json RUTA)\n")
 
     if args.open:
         code = find_code_cli()

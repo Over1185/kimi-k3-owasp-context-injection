@@ -54,7 +54,9 @@ def _tool_detail(part: dict) -> str:
         msg = part.get("invocationMessage") or part.get("pastTenseMessage")
         cmd = msg.get("value", "") if isinstance(msg, dict) else (msg or "")
     ic = part.get("isConfirmed")
-    if isinstance(ic, dict):
+    if isinstance(ic, dict) and not _was_executed(part):
+        state = "DENEGADA/OMITIDA por el usuario"
+    elif isinstance(ic, dict):
         state = {0: "denegada", 1: "no requería confirmación", 2: "auto-aprobada por un ajuste", 3: "aprobada por permiso del servicio", 4: "APROBADA POR EL USUARIO", 5: "omitida"}.get(ic.get("type"), f"estado={ic}")
     elif ic is True:
         state = "aprobada"
@@ -67,12 +69,22 @@ def _tool_detail(part: dict) -> str:
 
 
 def _was_executed(part: dict) -> bool:
-    """False si el usuario denegó u omitió la herramienta (isConfirmed 0 = denegada, 5 = omitida)."""
+    """False si el usuario denegó/omitió la herramienta.
+
+    VS Code lo exporta como isConfirmed.type == 4 (acción del usuario) con
+    selectedButtonKind == "deny" (botón "Omitir"/"Denegar"); también se contemplan
+    isConfirmed False y los tipos 0 (denegada) y 5 (omitida).
+    """
     ic = part.get("isConfirmed")
     if ic is False:
         return False
-    if isinstance(ic, dict) and ic.get("type") in (0, 5):
-        return False
+    if isinstance(ic, dict):
+        if ic.get("type") in (0, 5):
+            return False
+        kind = str(ic.get("selectedButtonKind") or "").lower()
+        button = str(ic.get("selectedButton") or "").lower()
+        if kind in ("deny", "skip") or button in ("skip", "deny"):
+            return False
     return True
 
 
@@ -127,9 +139,8 @@ def main() -> int:
     ap.add_argument("--scenario", required=True)
     ap.add_argument("--group", required=True, choices=GROUPS)
     ap.add_argument("--iter", type=int, required=True, dest="iteration")
-    ap.add_argument("--base", default=None, help=f"carpeta base (default: {DEFAULT_BASE}; con --neutral: ~/trabajo)")
-    ap.add_argument("--neutral", action="store_true",
-                    help="la corrida se preparó con prepare_workspace.py --neutral (ruta <base>/app)")
+    ap.add_argument("--base", default=None, help=f"carpeta base (default: {DEFAULT_BASE})")
+    ap.add_argument("--neutral", action="store_true", help=argparse.SUPPRESS)   # sin efecto (compatibilidad)
     ap.add_argument("--chat-json", default=None,
                     help=f"export del chat en JSON (default: {DEFAULT_CHAT_JSON})")
     ap.add_argument("--allow-stale-chat", action="store_true",
@@ -153,24 +164,34 @@ def main() -> int:
         sys.exit(f"La iteración debe estar entre 1 y {N_ITERATIONS}")
 
     fid = fragment_id(args.scenario, args.group, args.iteration)
-    base, ws, cur = resolve_workspace(args.base, args.group, args.scenario, args.iteration, args.neutral)
+    base, ws, cur = resolve_workspace(args.base)
     if not ws.is_dir():
+        if args.discard:
+            # La carpeta ya no existe (p. ej. se borró a mano): se deja constancia igualmente.
+            log_event(fid, "DESCARTADO", args.discard + " (la carpeta de trabajo ya no existía)")
+            print(f"Corrida {fid} marcada como descartada (la carpeta ya no existía). Regístralo en la bitácora.")
+            return 0
         sys.exit(f"No existe la carpeta de trabajo: {ws}")
     created_utc = None
+    redo = False
     if cur.is_file():
         meta = json.loads(cur.read_text(encoding="utf-8"))
         current = meta.get("id")
         created_utc = meta.get("created_utc")
+        redo = bool(meta.get("redo"))
         if current != fid:
             sys.exit(f"La carpeta de trabajo corresponde a la corrida {current}, no a {fid}. "
                      "Revisa los argumentos (--scenario/--group/--iter).")
     else:
         sys.exit(f"Falta el marcador {cur}: la carpeta no fue creada con prepare_workspace.py.")
+    if redo:
+        args.overwrite = True   # repetición autorizada al preparar con --redo
 
     # --- Descarte explícito
     if args.discard:
         log_event(fid, "DESCARTADO", args.discard)
         rmtree_force(ws)
+        cur.unlink(missing_ok=True)
         print(f"Corrida {fid} descartada y carpeta borrada. Regístralo en la bitácora y repite la corrida.")
         return 0
 
@@ -315,6 +336,7 @@ def main() -> int:
               + (f"; {chat_summary}" if chat_summary else ""))
     if not args.keep:
         rmtree_force(ws)
+        cur.unlink(missing_ok=True)
     print(f"OK: {dest_py.relative_to(ROOT)} guardado."
           f"{'' if args.keep else ' Carpeta desechable borrada.'}")
     return 0
