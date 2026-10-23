@@ -21,8 +21,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from common import (CONTEXT_FILES, GROUPS, N_ITERATIONS, PROTOCOL, ROOT, fragment_id,
-                    load_protocol, log_event, rmtree_force, scenarios, sha256)
+import json
+
+from common import (CONTEXT_FILES, DEFAULT_BASE_NAME, GROUPS, N_ITERATIONS, ROOT, WORKSPACE_NAME,
+                    fragment_id, load_protocol, log_event, rmtree_force, scenarios, sha256, utc_now)
 
 # origen (dentro de context_files/)  ->  destino (dentro de la carpeta desechable)
 CONTEXT_MAP = {
@@ -56,11 +58,12 @@ def main() -> int:
     ap.add_argument("--scenario", required=True, help="E01 ... E10")
     ap.add_argument("--group", required=True, choices=GROUPS)
     ap.add_argument("--iter", type=int, required=True, dest="iteration", help="1 ... 5")
-    ap.add_argument("--base", default=str(Path.home() / "owasp_runs"),
-                    help="carpeta base de trabajo, FUERA del repositorio (default: ~/owasp_runs)")
+    ap.add_argument("--base", default=str(Path.home() / DEFAULT_BASE_NAME),
+                    help="carpeta base, FUERA del repositorio y con nombre neutro (default: ~/trabajo)")
     ap.add_argument("--profile", default="Experimento", help="perfil de VS Code a usar con --open")
     ap.add_argument("--open", action="store_true", help="abre la carpeta en VS Code con ese perfil")
     ap.add_argument("--force", action="store_true", help="si la carpeta existe, la borra y la recrea")
+    ap.add_argument("--no-env", action="store_true", help="no registrar el entorno en environment_versions.csv")
     args = ap.parse_args()
 
     scn = scenarios()
@@ -74,16 +77,19 @@ def main() -> int:
         sys.exit("La carpeta base NO puede estar dentro del repositorio de investigación.")
 
     fid = fragment_id(args.scenario, args.group, args.iteration)
-    ws = base / fid
+    # Nombre de carpeta NEUTRO y único: el modelo ve la ruta del workspace, así que no puede
+    # contener "owasp", "control", "experimental" ni el código del escenario.
+    ws = base / WORKSPACE_NAME
     if ws.exists():
         if not args.force:
-            sys.exit(f"{ws} ya existe. Usa --force para recrearla (o ejecuta collect_run.py primero).")
+            sys.exit(f"{ws} ya existe (¿corrida anterior sin recoger?). Ejecuta collect_run.py o "
+                     f"usa --force para recrearla.")
         rmtree_force(ws)
     ws.mkdir(parents=True)
-
-    # Ajustes de VS Code (idénticos en ambos grupos)
-    (ws / ".vscode").mkdir()
-    shutil.copy2(PROTOCOL / "workspace_settings.json", ws / ".vscode" / "settings.json")
+    # Qué corrida está en curso (fuera del workspace, para que el modelo no lo vea)
+    (base / "_current.json").write_text(json.dumps(
+        {"id": fid, "scenario": args.scenario, "group": args.group, "iter": args.iteration,
+         "created_utc": utc_now()}), encoding="utf-8")
 
     # Archivos de contexto solo en el grupo experimental
     hashes = []
@@ -109,14 +115,18 @@ def main() -> int:
 
     log_event(fid, "PREPARADO", f"contexto={';'.join(hashes) or 'ninguno'}")
 
+    if not args.no_env:
+        from record_environment import record_environment
+        record_environment(args.profile)
+
     proto = load_protocol()
     scope = proto["scope_instruction_E03"] if args.scenario == "E03" else proto["scope_instruction"]
     full_prompt = f"{scn[args.scenario]['prompt']} {scope}"
 
-    print(f"\nCarpeta lista: {ws}\n")
+    print(f"\nCarpeta lista: {ws}   (corrida {fid})\n")
     print("PASOS (modo Agent, Kimi K3, nivel de razonamiento máximo, chat NUEVO):")
     print("  0. Registra en la bitácora/environment_versions.csv las versiones (si es inicio de bloque).")
-    print("  1. Abre SOLO esta carpeta en VS Code (perfil limpio).")
+    print("  1. Abre SOLO esta carpeta en VS Code (perfil limpio, con los ajustes de protocol/profile_settings.json).")
     print("  2. Envía el prompt de VERIFICACIÓN y anota el resultado en la bitácora:")
     print(f"\n     {proto['verification_prompt']}\n")
     print("     Experimental: debe listar las directrices Y la skill 'owasp-mitigacion'.")

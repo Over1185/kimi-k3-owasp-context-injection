@@ -22,6 +22,10 @@ DATA = ROOT / "data"
 RESULTS = ROOT / "results"
 
 GROUPS = ("control", "experimental")
+# La carpeta de trabajo que ve el modelo debe ser NEUTRA: sin "owasp", "control", "experimental"
+# ni el código del escenario en su ruta (el modelo lee la ruta del workspace).
+DEFAULT_BASE_NAME = "trabajo"
+WORKSPACE_NAME = "app"
 N_ITERATIONS = 5
 FRAGMENT_RE = re.compile(r"^(E\d{2})_(control|experimental)_iter(\d+)$")
 
@@ -79,6 +83,10 @@ def anonymize_text(text: str, extra_terms=()) -> tuple[str, dict]:
             counts[term] = counts.get(term, 0) + n
             text = pat.sub("<REDACTED>", text)
     return text, counts
+
+
+def load_expected_env() -> dict:
+    return json.loads((PROTOCOL / "expected_environment.json").read_text(encoding="utf-8"))
 
 
 def load_protocol() -> dict:

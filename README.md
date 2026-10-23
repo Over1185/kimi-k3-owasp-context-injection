@@ -15,7 +15,7 @@ Medición: Bandit, Semgrep (`p/owasp-top-ten`) y pip-audit (solo E03). Versiones
 
 | Carpeta | Contenido |
 |---|---|
-| `protocol/` | Prompts (`prompts.json`), ajustes de VS Code de cada corrida, mapeo de reglas SAST, configuración SAST |
+| `protocol/` | Prompts (`prompts.json`), entorno esperado (`expected_environment.json`), ajustes del perfil de VS Code (`profile_settings.json`), mapeo de reglas SAST, configuración SAST |
 | `context_files/` | Copia de referencia de los archivos de contexto del grupo experimental (**no se editan tras congelar el protocolo**) |
 | `scripts/` | `prepare_workspace.py`, `collect_run.py`, `run_sast.py`, `consolidate.py` |
 | `fragments/` | Código generado: `<escenario>_<grupo>_iter<n>.py` |
@@ -36,6 +36,16 @@ python scripts/consolidate.py                          # genera data/matriz_regi
 python analysis/run_all.py                             # tablas y figuras en results/
 ```
 
+## Reglas de aislamiento de cada corrida
+
+- La carpeta de trabajo que ve el modelo es siempre `~/trabajo/app` (nombre neutro): su ruta no contiene "owasp", "control", "experimental" ni el código del escenario, porque el modelo lee la ruta.
+- Los ajustes de `protocol/profile_settings.json` se configuran UNA vez en el perfil de VS Code `Experimento` (no dentro de la carpeta de trabajo, para que el modelo no los vea).
+- `collect_run.py` compara cada export contra `protocol/expected_environment.json` (modelo, razonamiento, tipo de agente, turnos, herramientas permitidas) y marca como inválida la corrida que no cumpla.
+
+## Registro automático del entorno
+
+`prepare_workspace.py` llama a `scripts/record_environment.py` en cada corrida. Compara el entorno (versión de VS Code, Copilot Chat, extensiones del perfil, herramientas SAST, huella del protocolo) con la última fila de `data/environment_versions.csv` y **solo agrega una fila si algo cambió**, indicando qué cambió. La versión interna de Kimi K3 no es legible automáticamente: anota cualquier cambio anunciado por GitHub en la columna `nota_manual`.
+
 ## Reproducir la generación (una corrida)
 
 ```bash
@@ -51,7 +61,8 @@ La temperatura del modelo no es configurable en Copilot Chat; hay un único revi
 
 ## Licencias
 
-Código y scripts: MIT (`LICENSE`). Datos, reportes y textos: CC BY 4.0 (<https://creativecommons.org/licenses/by/4.0/>). Los fragmentos de `fragments/` son salida de un modelo de IA; se publican como datos de investigación.
+Código y scripts: MIT (`LICENSE`). Datos, reportes y textos: CC BY 4.0
+(<https://creativecommons.org/licenses/by/4.0/>). Los fragmentos de `fragments/` son salida de un modelo de IA; se publican como datos de investigación.
 
 ## Cómo citar
 
