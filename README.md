@@ -38,10 +38,12 @@ python analysis/run_all.py                             # tablas y figuras en res
 
 ## Reglas de aislamiento de cada corrida
 
-- **Una carpeta desechable por corrida, fuera del repositorio.** Por defecto se crea en `~/owasp_runs/<grupo>/<escenario>/iter<N>` (p. ej. `C:\Users\Over\owasp_runs\experimental\E05\iter2`), con git inicializado y un commit base.
-- **Ruta neutra (opcional, recomendada para el grupo control).** El modelo lee la ruta del workspace. La ruta organizada contiene `owasp_runs`, el grupo y el código del escenario, lo que puede sugerirle OWASP al modelo. Con `--neutral` la carpeta es `~/trabajo/app`, sin ninguna pista. Si usas `--neutral` al preparar, úsalo también en `collect_run.py`.
+- **Una sola carpeta desechable, con ruta neutra:** `~/trabajo/app` (p. ej. `C:\Users\Over\trabajo\app`). El modelo lee la ruta del workspace; por eso no contiene "owasp", el grupo ni el escenario. (En una prueba con la ruta `owasp_runs\control\E01\iter1`, el modelo del grupo control dedujo que era un benchmark OWASP.)
+- **Cada `prepare_workspace.py` borra la carpeta de la corrida anterior** y archiva el export de chat viejo en `~/owasp_runs/_export/anteriores/`, para que nada se arrastre entre corridas. Si la corrida anterior nunca se recogió ni se descartó, se registra en `data/run_log.csv` como `ABANDONADA_AL_PREPARAR`.
+- **Sin solapamientos:** antes de preparar, `prepare_workspace.py` consulta `data/run_log.csv` y `fragments/`. Si esa combinación escenario + grupo + iteración ya fue recogida, se niega a prepararla. Para repetirla a propósito hay que usar `--redo` (queda registrado como `REPETICION_AUTORIZADA` y `collect_run.py` sobrescribe el fragmento).
 - Los ajustes de `protocol/profile_settings.json` se configuran UNA vez en el perfil de VS Code `Experimento` (no dentro de la carpeta de trabajo). **Mantén `chat.tools.global.autoApprove` en `false`**: no actives el modo de aprobación automática.
-- **El agente solo puede crear `scenario.py`** (y `requirements.txt` en E03). No debe ejecutar código ni usar el terminal, la web o servidores MCP. Si el agente pide permiso para una herramienta fuera de alcance, pulsa **Denegar/Omitir**. Una herramienta denegada solo genera un aviso; una herramienta aprobada y ejecutada invalida la corrida (hay que descartarla y repetirla).
+- **Usa SIEMPRE el mismo tipo de sesión de chat** (agente `github.copilot.editsAgent`, la sesión *Local* de VS Code). Una sesión de otro tipo (p. ej. Copilot CLI, agente `agent-host-copilotcli`) cambia las herramientas y el export, y la corrida se marca inválida.
+- **El agente solo puede crear `scenario.py`** (y `requirements.txt` en E03). No debe ejecutar código ni usar el terminal (`run_in_terminal`, `powershell`...), la web o servidores MCP. Si pide permiso para una herramienta fuera de alcance, pulsa **Denegar/Omitir**. Una herramienta denegada solo genera un aviso; una herramienta ejecutada (aprobada por ti o que no requirió confirmación) invalida la corrida: hay que descartarla y repetirla.
 - `collect_run.py` compara cada export contra `protocol/expected_environment.json` (modelo, razonamiento, tipo de agente, turnos, herramientas permitidas) y marca como inválida la corrida que no cumpla.
 
 ## Registro automático del entorno
@@ -52,19 +54,17 @@ python analysis/run_all.py                             # tablas y figuras en res
 
 Flujo completo, de principio a fin:
 
-**1. Preparar la carpeta** (crea el workspace, registra el entorno y, con `--open`, abre VS Code con el perfil `Experimento`):
+**1. Preparar la carpeta.** Revisa que la corrida no esté hecha, limpia la anterior, crea `~/trabajo/app`, registra el entorno y, con `--open`, abre VS Code con el perfil `Experimento`:
 
 ```bash
 python scripts/prepare_workspace.py --scenario E05 --group experimental --iter 2 --open
-# Crea: ~/owasp_runs/experimental/E05/iter2
-# Ruta neutra: añade --neutral  (crea ~/trabajo/app)
 ```
 
-**2. Ejecutar la corrida en VS Code** (modo Agent, Kimi K3, razonamiento máximo, chat NUEVO). El script imprime los prompts exactos:
+**2. Ejecutar la corrida en VS Code** (sesión Local, modo Agent, Kimi K3, razonamiento máximo, chat NUEVO). El script imprime los prompts exactos:
 
 1. Envía el prompt de **verificación**. El grupo experimental debe listar las directrices y la skill `owasp-mitigacion`; el control debe indicar que no hay convenciones ni skills. Si no se cumple, descarta la corrida (paso 5).
 2. En el MISMO chat, envía el prompt del escenario.
-3. **Rechaza (Denegar/Omitir) cualquier acción fuera de `scenario.py`**, sobre todo `run_in_terminal`. No ejecutes ni pruebes el código generado.
+3. **Rechaza (Denegar/Omitir) cualquier acción fuera de `scenario.py`**, sobre todo el terminal. No ejecutes ni pruebes el código generado.
 
 **3. Exportar el chat** con el comando de VS Code `Chat: Export Chat...` y guárdalo como JSON en:
 
@@ -80,7 +80,6 @@ python scripts/collect_run.py --scenario E05 --group experimental --iter 2 --ver
 
 - Por defecto lee el chat de `~/owasp_runs/_export/chat.json`. Para usar otro archivo: `--chat-json RUTA`.
 - Si el export es **anterior** a la preparación de la corrida, el script se detiene (probablemente es el chat de otra corrida). Vuelve a exportar, o usa `--allow-stale-chat` si estás seguro.
-- Si preparaste con `--neutral`, añade `--neutral` aquí también.
 
 **5. Descartar una corrida inválida** (verificación fallida, herramienta ejecutada, archivos extra...):
 
@@ -88,21 +87,29 @@ python scripts/collect_run.py --scenario E05 --group experimental --iter 2 --ver
 python scripts/collect_run.py --scenario E05 --group experimental --iter 2 --discard "motivo"
 ```
 
-Después anota el caso en `data/bitacora.csv` y repite la corrida.
+Después anota el caso en `data/bitacora.csv` y repite la corrida (una corrida descartada sí puede prepararse otra vez sin `--redo`).
 
-### Opciones útiles de `collect_run.py`
+**Repetir una corrida ya recogida** (decisión deliberada, anótala en la bitácora):
 
-| Opción | Efecto |
-|---|---|
-| `--chat-json RUTA` | Usa otro export de chat (por defecto `~/owasp_runs/_export/chat.json`) |
-| `--chat-md RUTA` | Guarda además el export en Markdown |
-| `--verification ok\|fail` | Resultado de la verificación de contexto |
-| `--discard MOTIVO` | Descarta la corrida y borra la carpeta |
-| `--skip-chat-check` | Omite la validación automática del chat (justifícalo en la bitácora) |
-| `--allow-stale-chat` | Permite un export más antiguo que la preparación de la corrida |
-| `--overwrite` | Sobrescribe un fragmento ya guardado (solo al repetir una corrida a propósito) |
-| `--keep` | No borra la carpeta desechable |
-| `--neutral` / `--base RUTA` | Layout neutro `~/trabajo/app` / otra carpeta base |
+```bash
+python scripts/prepare_workspace.py --scenario E05 --group experimental --iter 2 --redo --open
+```
+
+### Opciones útiles
+
+| Script | Opción | Efecto |
+|---|---|---|
+| `prepare_workspace.py` | `--redo` | Permite preparar una corrida ya recogida (el fragmento se sobrescribirá al recoger) |
+| `prepare_workspace.py` | `--open` / `--profile NOMBRE` | Abre la carpeta en VS Code con ese perfil |
+| `prepare_workspace.py` | `--no-env` | No registra el entorno en `environment_versions.csv` |
+| `collect_run.py` | `--chat-json RUTA` | Usa otro export de chat (por defecto `~/owasp_runs/_export/chat.json`) |
+| `collect_run.py` | `--chat-md RUTA` | Guarda además el export en Markdown |
+| `collect_run.py` | `--verification ok\|fail` | Resultado de la verificación de contexto |
+| `collect_run.py` | `--discard MOTIVO` | Descarta la corrida y borra la carpeta |
+| `collect_run.py` | `--skip-chat-check` | Omite la validación automática del chat (justifícalo en la bitácora) |
+| `collect_run.py` | `--allow-stale-chat` | Permite un export más antiguo que la preparación de la corrida |
+| `collect_run.py` | `--overwrite` | Sobrescribe un fragmento ya guardado |
+| `collect_run.py` | `--keep` | No borra la carpeta desechable |
 
 ## Limitaciones conocidas
 
