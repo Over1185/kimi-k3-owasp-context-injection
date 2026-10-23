@@ -190,10 +190,16 @@ def main() -> int:
 
     # --- Descarte explícito
     if args.discard:
-        log_incident(fid, "DESCARTADO", args.discard, "Carpeta borrada; repetir la corrida")
-        rmtree_force(ws)
+        deleted = rmtree_force(ws)
+        log_incident(fid, "DESCARTADO", args.discard,
+                     "Carpeta borrada; repetir la corrida" if deleted
+                     else "Corrida descartada; la carpeta estaba en uso y NO se pudo borrar (se borrará al preparar la siguiente)")
         cur.unlink(missing_ok=True)
-        print(f"Corrida {fid} descartada y carpeta borrada. Quedó anotado en la bitácora; repite la corrida.")
+        if deleted:
+            print(f"Corrida {fid} descartada y carpeta borrada. Quedó anotado en la bitácora; repite la corrida.")
+        else:
+            print(f"Corrida {fid} descartada (anotado en la bitácora), pero la carpeta {ws} está en uso y no se pudo borrar.\n"
+                  "Cierra VS Code/terminales que la tengan abierta; se borrará sola al preparar la siguiente corrida.")
         return 0
 
     # --- 0. Export del chat: por defecto ~/owasp_runs/_export/chat.json
@@ -340,11 +346,17 @@ def main() -> int:
                      "Revisar: normalmente la corrida debe descartarse (--discard) y repetirse")
     log_event(fid, "RECOGIDO", f"verificacion={args.verification or 'sin_dato'}; " + "; ".join(hashes)
               + (f"; {chat_summary}" if chat_summary else ""))
+    cleaned = True
     if not args.keep:
-        rmtree_force(ws)
+        cleaned = rmtree_force(ws)
         cur.unlink(missing_ok=True)
+        if not cleaned:
+            log_event(fid, "AVISO_LIMPIEZA", "corrida recogida correctamente, pero la carpeta estaba en uso y no se pudo borrar")
     print(f"OK: {dest_py.relative_to(ROOT)} guardado."
-          f"{'' if args.keep else ' Carpeta desechable borrada.'}")
+          f"{'' if args.keep else (' Carpeta desechable borrada.' if cleaned else '')}")
+    if not cleaned:
+        print(f"AVISO: la corrida SÍ quedó recogida, pero {ws} está en uso y no se pudo borrar.\n"
+              "Cierra VS Code/terminales que la tengan abierta; se borrará sola al preparar la siguiente corrida.")
     return 0
 
 

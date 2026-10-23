@@ -9,6 +9,7 @@ import re
 import shutil
 import stat
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -215,14 +216,31 @@ def count_loc(path: Path) -> int:
     return n
 
 
-def rmtree_force(path: Path) -> None:
-    """Borra una carpeta incluso si tiene archivos de solo lectura (.git en Windows)."""
+def rmtree_force(path: Path, retries: int = 5, delay: float = 1.0) -> bool:
+    """Borra una carpeta aunque tenga archivos de solo lectura (.git en Windows).
+
+    Si Windows la tiene bloqueada (WinError 32: VS Code, una terminal con cd ahí,
+    Copilot, antivirus...) reintenta con espera creciente. Devuelve True si la
+    carpeta quedó borrada y False si sigue existiendo; NO lanza excepción por bloqueo,
+    para que el llamador decida qué hacer (y no se rompa el flujo de la bitácora).
+    """
+    path = Path(path)
 
     def _handler(func, p, _exc):
-        os.chmod(p, stat.S_IWRITE)
+        os.chmod(p, stat.S_IWRITE)   # arregla solo-lectura; un bloqueo real lo gestiona el bucle
         func(p)
 
-    if sys.version_info >= (3, 12):
-        shutil.rmtree(path, onexc=_handler)
-    else:
-        shutil.rmtree(path, onerror=_handler)
+    for attempt in range(1, retries + 1):
+        if not path.exists():
+            return True
+        try:
+            if sys.version_info >= (3, 12):
+                shutil.rmtree(path, onexc=_handler)
+            else:
+                shutil.rmtree(path, onerror=_handler)
+        except OSError:
+            if attempt < retries:
+                time.sleep(delay * attempt)
+        if not path.exists():
+            return True
+    return not path.exists()

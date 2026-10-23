@@ -120,7 +120,9 @@ def main() -> int:
             print(f"AVISO: {msg}. Quedó anotado en run_log.csv y en la bitácora.")
             log_incident(prev, "ABANDONADA_AL_PREPARAR", f"{msg} al preparar {fid}",
                          "Carpeta borrada; la corrida debe repetirse")
-        rmtree_force(ws)
+        if not rmtree_force(ws):
+            sys.exit(f"No se pudo borrar la carpeta anterior {ws}: está en uso por otro proceso.\n"
+                     "Cierra VS Code, terminales y cualquier programa que la tenga abierta, y vuelve a intentarlo.")
         print(f"Carpeta anterior borrada: {ws} (corrida {prev})")
     old_chat = DEFAULT_EXPORT_DIR / "chat.json"
     if old_chat.is_file():
