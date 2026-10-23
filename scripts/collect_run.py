@@ -26,7 +26,7 @@ import re
 from datetime import datetime, timezone
 
 from common import (DEFAULT_BASE, DEFAULT_CHAT_JSON, anonymize_text, load_expected_env, load_terms,
-                    CHAT_LOGS, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT, fragment_id, log_event,
+                    CHAT_LOGS, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT, fragment_id, log_event, log_incident,
                     resolve_workspace, rmtree_force, scenarios, sha256)
 
 
@@ -168,8 +168,9 @@ def main() -> int:
     if not ws.is_dir():
         if args.discard:
             # La carpeta ya no existe (p. ej. se borró a mano): se deja constancia igualmente.
-            log_event(fid, "DESCARTADO", args.discard + " (la carpeta de trabajo ya no existía)")
-            print(f"Corrida {fid} marcada como descartada (la carpeta ya no existía). Regístralo en la bitácora.")
+            log_incident(fid, "DESCARTADO", args.discard + " (la carpeta de trabajo ya no existía)",
+                         "Corrida descartada; repetirla")
+            print(f"Corrida {fid} marcada como descartada (la carpeta ya no existía). Quedó anotado en la bitácora.")
             return 0
         sys.exit(f"No existe la carpeta de trabajo: {ws}")
     created_utc = None
@@ -189,10 +190,10 @@ def main() -> int:
 
     # --- Descarte explícito
     if args.discard:
-        log_event(fid, "DESCARTADO", args.discard)
+        log_incident(fid, "DESCARTADO", args.discard, "Carpeta borrada; repetir la corrida")
         rmtree_force(ws)
         cur.unlink(missing_ok=True)
-        print(f"Corrida {fid} descartada y carpeta borrada. Regístralo en la bitácora y repite la corrida.")
+        print(f"Corrida {fid} descartada y carpeta borrada. Quedó anotado en la bitácora; repite la corrida.")
         return 0
 
     # --- 0. Export del chat: por defecto ~/owasp_runs/_export/chat.json
@@ -216,18 +217,18 @@ def main() -> int:
     pycache = [p for _, p in changes if "__pycache__" in p or p.endswith(".pyc")]
     if extra:
         detail = "; ".join(f"{s} {p}" for s, p in extra)
-        log_event(fid, "INVALIDA_ARCHIVOS_EXTRA", detail)
+        log_incident(fid, "INVALIDA_ARCHIVOS_EXTRA", detail, "Corrida inválida: descartar (--discard) y repetir")
         print(f"CORRIDA INVÁLIDA: el agente tocó archivos fuera del alcance:\n  {detail}")
-        print("Documenta el caso en la bitácora y vuelve a ejecutar con --discard para repetirla.")
+        print("El caso ya quedó anotado en la bitácora; ejecuta con --discard para repetirla.")
         return 2
     if pycache:
-        print("AVISO: hay __pycache__ (el agente ejecutó código). Anótalo en la bitácora.")
-        log_event(fid, "AVISO_PYCACHE", "el agente ejecutó código")
+        print("AVISO: hay __pycache__ (el agente ejecutó código). Quedó anotado en la bitácora.")
+        log_incident(fid, "AVISO_PYCACHE", "el agente ejecutó código (hay __pycache__)", "Revisar el chat; posible corrida inválida")
     if not (ws / "scenario.py").is_file():
-        log_event(fid, "INVALIDA_SIN_SCENARIO", "no existe scenario.py")
+        log_incident(fid, "INVALIDA_SIN_SCENARIO", "no existe scenario.py", "Corrida inválida: descartar (--discard) y repetir")
         sys.exit("No existe scenario.py: la generación falló. Usa --discard para repetirla.")
     if args.scenario == "E03" and not (ws / "requirements.txt").is_file():
-        log_event(fid, "INVALIDA_SIN_REQUIREMENTS", "E03 sin requirements.txt")
+        log_incident(fid, "INVALIDA_SIN_REQUIREMENTS", "E03 sin requirements.txt", "Corrida inválida: descartar (--discard) y repetir")
         sys.exit("E03 requiere requirements.txt: la generación falló. Usa --discard para repetirla.")
 
     # --- 1b. Validar el export del chat (modelo, nº de turnos, verificación de contexto)
@@ -278,21 +279,23 @@ def main() -> int:
                          "en el perfil para aprobar tú cada acción")
         if args.group == "control" and re.search(r"owasp", " ".join(info["thought"] + info["texts"]), re.I):
             warns.append("el modelo mencionó 'OWASP' en el grupo CONTROL: revisa qué se lo sugirió "
-                         "(nombre de carpeta, archivos visibles) y anótalo en la bitácora")
+                         "(nombre de carpeta, archivos visibles); queda anotado en la bitácora")
         if denied_bad:
             warns.append(f"el agente intentó usar herramientas fuera de alcance pero las DENEGASTE/omitiste: {denied_bad} "
-                         "(anótalo en la bitácora; no invalida la corrida)")
+                         "(queda anotado en la bitácora; no invalida la corrida)")
         for w in warns:
             print("AVISO:", w)
-            log_event(fid, "AVISO_CHAT", w)
+            log_incident(fid, "AVISO_CHAT", w, "Aviso; la corrida sigue válida. Revisar y comentar si procede")
         if problems:
-            log_event(fid, "INVALIDA_CHAT", " | ".join(problems) + " || " + chat_summary)
+            log_incident(fid, "INVALIDA_CHAT", " | ".join(problems) + " || " + chat_summary,
+                         "Corrida inválida: descartar (--discard) y repetir, o justificar --skip-chat-check")
             print("CORRIDA INVÁLIDA según el chat exportado:\n  - " + "\n  - ".join(problems))
             print("Si es un falso positivo, repite con --skip-chat-check y justifícalo en la bitácora; "
                   "si no, usa --discard y repite la corrida.")
             return 2
     elif args.chat_json and args.skip_chat_check:
-        log_event(fid, "CHAT_CHECK_OMITIDO", "validación automática del chat omitida por el investigador")
+        log_incident(fid, "CHAT_CHECK_OMITIDO", "validación automática del chat omitida (--skip-chat-check)",
+                     "Justificar manualmente en esta bitácora por qué se omitió")
 
     # --- 2. Copiar fragmento(s)
     dest_dir = FRAGMENTS / args.group
@@ -332,6 +335,9 @@ def main() -> int:
         print("AVISO: no indicaste export del chat (--chat-json / --chat-md). Se recomienda guardarlo siempre.")
 
     # --- 4. Registrar y limpiar
+    if args.verification == "fail":
+        log_incident(fid, "VERIFICACION_FALLIDA", "se recogió la corrida con --verification fail",
+                     "Revisar: normalmente la corrida debe descartarse (--discard) y repetirse")
     log_event(fid, "RECOGIDO", f"verificacion={args.verification or 'sin_dato'}; " + "; ".join(hashes)
               + (f"; {chat_summary}" if chat_summary else ""))
     if not args.keep:

@@ -32,7 +32,7 @@ import json
 from datetime import datetime
 
 from common import (CONTEXT_FILES, DEFAULT_BASE, DEFAULT_EXPORT_DIR, FRAGMENTS, GROUPS, N_ITERATIONS, ROOT,
-                    fragment_id, load_protocol, log_event, resolve_workspace, rmtree_force,
+                    fragment_id, load_protocol, log_event, log_incident, resolve_workspace, rmtree_force,
                     run_status, scenarios, sha256, utc_now)
 
 # origen (dentro de context_files/)  ->  destino (dentro de la carpeta desechable)
@@ -78,6 +78,7 @@ def main() -> int:
     ap.add_argument("--force", action="store_true", help=argparse.SUPPRESS)
     ap.add_argument("--neutral", action="store_true", help=argparse.SUPPRESS)
     ap.add_argument("--no-env", action="store_true", help="no registrar el entorno en environment_versions.csv")
+    ap.add_argument("--menu", action="store_true", help=argparse.SUPPRESS)   # lo usa scripts/menu.py
     args = ap.parse_args()
 
     scn = scenarios()
@@ -98,10 +99,11 @@ def main() -> int:
     if (status == "recogido" or frag.exists()) and not args.redo:
         sys.exit(f"La corrida {fid} YA está hecha (run_log: {status}; fragmento: "
                  f"{'existe' if frag.exists() else 'no existe'}). No se prepara para evitar solapamientos.\n"
-                 f"Si de verdad quieres repetirla, usa --redo (y anótalo en la bitácora).")
+                 f"Si de verdad quieres repetirla, usa --redo (queda anotado en la bitácora).")
     if args.redo and (status == "recogido" or frag.exists()):
         print(f"AVISO: repitiendo la corrida {fid} (--redo); al recogerla se sobrescribirá el fragmento.")
-        log_event(fid, "REPETICION_AUTORIZADA", "preparada con --redo")
+        log_incident(fid, "REPETICION_AUTORIZADA", "corrida ya recogida, preparada de nuevo con --redo",
+                     "Repetición deliberada; el fragmento previo se sobrescribirá al recoger")
     elif status == "preparado":
         print(f"AVISO: {fid} fue preparada antes y nunca se recogió ni se descartó; se prepara de nuevo.")
 
@@ -115,8 +117,9 @@ def main() -> int:
                 pass
         if prev != "desconocida" and run_status(prev) == "preparado":
             msg = f"carpeta de {prev} borrada sin haberse recogido ni descartado"
-            print(f"AVISO: {msg}. Quedó registrado en data/run_log.csv; anótalo en la bitácora.")
-            log_event(prev, "ABANDONADA_AL_PREPARAR", f"{msg} al preparar {fid}")
+            print(f"AVISO: {msg}. Quedó anotado en run_log.csv y en la bitácora.")
+            log_incident(prev, "ABANDONADA_AL_PREPARAR", f"{msg} al preparar {fid}",
+                         "Carpeta borrada; la corrida debe repetirse")
         rmtree_force(ws)
         print(f"Carpeta anterior borrada: {ws} (corrida {prev})")
     old_chat = DEFAULT_EXPORT_DIR / "chat.json"
@@ -174,15 +177,23 @@ def main() -> int:
     print(f"\n     {proto['verification_prompt']}\n")
     print("     Experimental: debe listar las directrices Y la skill 'owasp-mitigacion'.")
     print("     Control: debe indicar que NO hay convenciones ni skills. Si no se cumple -> descarta:")
-    print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
-          f"--iter {args.iteration} --discard \"verificacion fallida\"")
+    if args.menu:
+        print("        (vuelve al menú y pulsa D)")
+    else:
+        print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
+              f"--iter {args.iteration} --discard \"verificacion fallida\"")
     print("  3. En el MISMO chat, envía el prompt del escenario:\n")
     print(f"     {full_prompt}\n")
     print("  4. Rechaza cualquier acción fuera de scenario.py (y requirements.txt en E03).")
-    print("  5. Exporta el chat (comando 'Chat: Export Chat...') y luego ejecuta:")
-    print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
-          f"--iter {args.iteration} --verification ok\n")
-    print(f"     (guarda el export como {DEFAULT_EXPORT_DIR / 'chat.json'}; si lo guardas en otro sitio añade --chat-json RUTA)\n")
+    if args.menu:
+        print("  5. Exporta el chat (comando 'Chat: Export Chat...') y guárdalo como")
+        print(f"        {DEFAULT_EXPORT_DIR / 'chat.json'}")
+        print("     Después vuelve a este menú y pulsa Y para recoger los datos.\n")
+    else:
+        print("  5. Exporta el chat (comando 'Chat: Export Chat...') y luego ejecuta:")
+        print(f"        python scripts/collect_run.py --scenario {args.scenario} --group {args.group} "
+              f"--iter {args.iteration} --verification ok\n")
+        print(f"     (guarda el export como {DEFAULT_EXPORT_DIR / 'chat.json'}; si lo guardas en otro sitio añade --chat-json RUTA)\n")
 
     if args.open:
         code = find_code_cli()

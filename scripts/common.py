@@ -173,6 +173,34 @@ def log_event(fid: str, event: str, detail: str = "") -> None:
         w.writerow([utc_now(), fid, event, detail])
 
 
+BITACORA_HEADER = ["fecha_hora", "id_fragmento", "tipo_evento", "descripcion", "accion_tomada"]
+
+
+def log_incident(fid: str, event: str, detail: str, action: str) -> None:
+    """Registra la incidencia en data/run_log.csv Y en data/bitacora.csv (anotación automática).
+
+    La bitácora conserva sus columnas; estas filas llevan el prefijo "[auto]" para distinguirlas
+    de las observaciones que escribas a mano (que siguen siendo bienvenidas).
+    """
+    log_event(fid, event, detail)
+    DATA.mkdir(exist_ok=True)
+    path = DATA / "bitacora.csv"
+    detail = anonymize_text(detail, load_terms())[0]
+    needs_header = (not path.exists()) or path.stat().st_size == 0
+    needs_newline = False
+    if not needs_header:
+        with path.open("rb") as f:
+            f.seek(-1, os.SEEK_END)
+            needs_newline = f.read(1) not in (b"\n", b"\r")
+    with path.open("a", newline="", encoding="utf-8") as f:
+        if needs_newline:
+            f.write("\r\n")
+        w = csv.writer(f)
+        if needs_header:
+            w.writerow(BITACORA_HEADER)
+        w.writerow([utc_now(), fid, event, f"[auto] {detail}", action])
+
+
 def count_loc(path: Path) -> int:
     """LdC = líneas no vacías que no son un comentario puro (#).
 
