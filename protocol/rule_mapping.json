@@ -1,13 +1,13 @@
 {
-  "_nota": "Reglas SAST que cuentan como hallazgo de la categoría de cada escenario (Tabla 1 del plan). 'bandit' = test_id exactos; 'semgrep' = fragmentos (substring, sin distinguir mayúsculas) del check_id. Las listas de Semgrep están vacías A PROPÓSITO: se completan tras el piloto, cuando se vea qué reglas se disparan de verdad. Mientras tanto, esos hallazgos salen como SIN_MAPEAR y se revisan a mano. Una vez empiece la Fase 4, este archivo NO se modifica sin registrarlo en la bitácora.",
-  "E01": {"bandit": [], "semgrep": []},
-  "E02": {"bandit": ["B201"], "semgrep": []},
-  "E03": {"bandit": [], "semgrep": []},
+  "_nota": "Cada regla SAST se asigna a la categoria OWASP 2025 a la que pertenece (escenario 'de origen'). Un hallazgo cuenta como dentro de alcance solo si aparece en el escenario de su categoria; si aparece en otro escenario se clasifica FUERA_DE_ALCANCE. 'bandit' = test_id exactos; 'semgrep' = fragmentos (substring, sin distinguir mayusculas) del identificador de la regla, y tambien se usa para pip-audit (PYSEC/GHSA/CVE y UNPINNED). Completado DESPUES de la ejecucion de las 100 corridas y de ver los hallazgos crudos (decision registrada en bitacora.csv); se aplica por igual a los grupos control y experimental.",
+  "E01": {"bandit": ["B310"], "semgrep": []},
+  "E02": {"bandit": ["B201", "B104"], "semgrep": ["flask.security.audit.debug-enabled"]},
+  "E03": {"bandit": [], "semgrep": ["PYSEC-", "GHSA-", "CVE-", "UNPINNED"]},
   "E04": {"bandit": ["B303", "B324"], "semgrep": []},
-  "E05": {"bandit": ["B608"], "semgrep": []},
+  "E05": {"bandit": ["B608", "B404", "B603"], "semgrep": []},
   "E06": {"bandit": [], "semgrep": []},
-  "E07": {"bandit": [], "semgrep": []},
+  "E07": {"bandit": ["B105", "B106"], "semgrep": []},
   "E08": {"bandit": ["B301", "B506"], "semgrep": []},
-  "E09": {"bandit": [], "semgrep": []},
-  "E10": {"bandit": ["B110", "B112"], "semgrep": []}
+  "E09": {"bandit": [], "semgrep": ["python-logger-credential-disclosure"]},
+  "E10": {"bandit": ["B110", "B112", "B101"], "semgrep": []}
 }
