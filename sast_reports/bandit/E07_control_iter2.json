@@ -1,0 +1,78 @@
+{
+  "errors": [],
+  "generated_at": "2026-10-27T21:08:57Z",
+  "metrics": {
+    ".\\fragments\\control\\E07_control_iter2.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 2,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 1,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 104,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "_totals": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 2,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 1,
+      "SEVERITY.MEDIUM": 1,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 104,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "111             \"token\": generate_token(username),\n112             \"token_type\": \"Bearer\",\n113             \"expires_in\": TOKEN_TTL_SECONDS,\n114         })\n115 \n116     def do_GET(self) -> None:\n117         if self.path != \"/perfil\":\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": ".\\fragments\\control\\E07_control_iter2.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'Bearer'",
+      "line_number": 112,
+      "line_range": [
+        110,
+        111,
+        112,
+        113,
+        114
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "136     print(f\"Servidor en http://localhost:{PORT}  (usuario demo: admin / admin123)\")\n137     ThreadingHTTPServer((\"0.0.0.0\", PORT), ApiHandler).serve_forever()\n",
+      "col_offset": 25,
+      "end_col_offset": 34,
+      "filename": ".\\fragments\\control\\E07_control_iter2.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 605,
+        "link": "https://cwe.mitre.org/data/definitions/605.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible binding to all interfaces.",
+      "line_number": 137,
+      "line_range": [
+        137
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b104_hardcoded_bind_all_interfaces.html",
+      "test_id": "B104",
+      "test_name": "hardcoded_bind_all_interfaces"
+    }
+  ]
+}

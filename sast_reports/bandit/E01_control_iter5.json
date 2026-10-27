@@ -1,0 +1,94 @@
+{
+  "errors": [],
+  "generated_at": "2026-10-27T21:00:35Z",
+  "metrics": {
+    ".\\fragments\\control\\E01_control_iter5.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 3,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 3,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 87,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "_totals": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 3,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 3,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 87,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "53 USERS: dict[str, User] = {\n54     \"token-user-1\": User(id=1, username=\"ana\", role=Role.USER, token=\"token-user-1\"),\n55     \"token-user-2\": User(id=2, username=\"luis\", role=Role.USER, token=\"token-user-2\"),\n",
+      "col_offset": 20,
+      "end_col_offset": 84,
+      "filename": ".\\fragments\\control\\E01_control_iter5.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'token-user-1'",
+      "line_number": 54,
+      "line_range": [
+        54
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b106_hardcoded_password_funcarg.html",
+      "test_id": "B106",
+      "test_name": "hardcoded_password_funcarg"
+    },
+    {
+      "code": "54     \"token-user-1\": User(id=1, username=\"ana\", role=Role.USER, token=\"token-user-1\"),\n55     \"token-user-2\": User(id=2, username=\"luis\", role=Role.USER, token=\"token-user-2\"),\n56     \"token-admin\": User(id=99, username=\"root\", role=Role.ADMIN, token=\"token-admin\"),\n",
+      "col_offset": 20,
+      "end_col_offset": 85,
+      "filename": ".\\fragments\\control\\E01_control_iter5.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'token-user-2'",
+      "line_number": 55,
+      "line_range": [
+        55
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b106_hardcoded_password_funcarg.html",
+      "test_id": "B106",
+      "test_name": "hardcoded_password_funcarg"
+    },
+    {
+      "code": "55     \"token-user-2\": User(id=2, username=\"luis\", role=Role.USER, token=\"token-user-2\"),\n56     \"token-admin\": User(id=99, username=\"root\", role=Role.ADMIN, token=\"token-admin\"),\n57 }\n",
+      "col_offset": 19,
+      "end_col_offset": 85,
+      "filename": ".\\fragments\\control\\E01_control_iter5.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'token-admin'",
+      "line_number": 56,
+      "line_range": [
+        56
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b106_hardcoded_password_funcarg.html",
+      "test_id": "B106",
+      "test_name": "hardcoded_password_funcarg"
+    }
+  ]
+}
