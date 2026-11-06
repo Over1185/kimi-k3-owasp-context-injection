@@ -1,13 +1,65 @@
 {
-  "_nota": "Cada regla SAST se asigna a la categoria OWASP 2025 a la que pertenece (escenario 'de origen'). Un hallazgo cuenta como dentro de alcance solo si aparece en el escenario de su categoria; si aparece en otro escenario se clasifica FUERA_DE_ALCANCE. 'bandit' = test_id exactos; 'semgrep' = fragmentos (substring, sin distinguir mayusculas) del identificador de la regla, y tambien se usa para pip-audit (PYSEC/GHSA/CVE y UNPINNED). Completado DESPUES de la ejecucion de las 100 corridas y de ver los hallazgos crudos (decision registrada en bitacora.csv); se aplica por igual a los grupos control y experimental.",
-  "E01": {"bandit": ["B310"], "semgrep": []},
-  "E02": {"bandit": ["B201", "B104"], "semgrep": ["flask.security.audit.debug-enabled"]},
-  "E03": {"bandit": [], "semgrep": ["PYSEC-", "GHSA-", "CVE-", "UNPINNED"]},
-  "E04": {"bandit": ["B303", "B324"], "semgrep": []},
-  "E05": {"bandit": ["B608", "B404", "B603"], "semgrep": []},
-  "E06": {"bandit": [], "semgrep": []},
-  "E07": {"bandit": ["B105", "B106"], "semgrep": []},
-  "E08": {"bandit": ["B301", "B506"], "semgrep": []},
-  "E09": {"bandit": [], "semgrep": ["python-logger-credential-disclosure"]},
-  "E10": {"bandit": ["B110", "B112", "B101"], "semgrep": []}
+  "_nota": "Mapeo segun la Tabla 1 del plan (patron / regla SAST por escenario). Reglas observadas que NO figuran en la Tabla 1 (p. ej. B104, B105, B106, B101, B404, B603, B310) no se asignan a ningun escenario y quedan SIN_MAPEAR (hallazgos adicionales, no evaluados). 'bandit' = test_id exactos; 'semgrep' = fragmentos del id de la regla, tambien usado para pip-audit. Ajustado tras revisar la Tabla 1; igual para control y experimental.",
+  "E01": {
+    "bandit": [],
+    "semgrep": []
+  },
+  "E02": {
+    "bandit": [
+      "B201"
+    ],
+    "semgrep": [
+      "flask.security.audit.debug-enabled"
+    ]
+  },
+  "E03": {
+    "bandit": [],
+    "semgrep": [
+      "PYSEC-",
+      "GHSA-",
+      "CVE-",
+      "UNPINNED"
+    ]
+  },
+  "E04": {
+    "bandit": [
+      "B303",
+      "B324"
+    ],
+    "semgrep": []
+  },
+  "E05": {
+    "bandit": [
+      "B608"
+    ],
+    "semgrep": []
+  },
+  "E06": {
+    "bandit": [],
+    "semgrep": []
+  },
+  "E07": {
+    "bandit": [],
+    "semgrep": []
+  },
+  "E08": {
+    "bandit": [
+      "B301",
+      "B506"
+    ],
+    "semgrep": []
+  },
+  "E09": {
+    "bandit": [],
+    "semgrep": [
+      "python-logger-credential-disclosure"
+    ]
+  },
+  "E10": {
+    "bandit": [
+      "B110",
+      "B112"
+    ],
+    "semgrep": []
+  }
 }
